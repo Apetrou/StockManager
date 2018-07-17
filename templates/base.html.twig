@@ -1,12 +1,127 @@
 <!DOCTYPE html>
 <html>
     <head>
+        {% block head_js %}
+            <!-- JQUERY -->
+            <script src="http://code.jquery.com/jquery-3.3.1.js"
+                    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+                    crossorigin="anonymous"></script>
+            <!-- BOOTSTRAP JS -->
+            <script src="http://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"
+                    integrity="sha384-u/bQvRA/1bobcXlcEYpsEdFVK/vJs3+T+nXLsBYJthmdBuavHvAW6UsmqO2Gd/F9"
+                    crossorigin="anonymous"></script>
+
+
+            {#<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>#}
+        {% endblock %}
+        {% block head_css %}
+            <!-- BOOTSTRAP CSS -->
+            <link href="http://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+                  rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+                  crossorigin="anonymous">
+            <!-- FA CSS -->
+            <link href="http://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+                  rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+            <!-- DT CSS -->
+            {#<link href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css"#}
+                  {#rel="stylesheet">#}
+            {#<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">#}
+        {% endblock %}
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark " style="margin-bottom: 30px;">
+            <a class="navbar-brand" href="#">Petrou Farming</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <form class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    {#<li class="nav-item {% if 'home' in app.request.uri %} active {% endif %}">#}
+                        {#<a class="nav-link" href="/home"><i class='fa fa-home' aria-hidden='true'></i> Home</a>#}
+                    {#</li>#}
+                    <li class="nav-item {% if 'product' in app.request.uri %} active {% endif %}">
+                        <a class="nav-link" href="/product"><i class='fa fas fa-archive' aria-hidden='true'></i> Products</a>
+                    </li>
+                    <li class="nav-item {% if 'customer' in app.request.uri %} active {% endif %}">
+                        <a class="nav-link" href="/customer"><i class='fa far fa-users' aria-hidden='true'></i> Customers</a>
+                    </li>
+                </ul>
+                <form class="form-inline" style="text-align: center;">
+                    <input type="text" id="search"  style="width:400px;  margin-left: 90px;" class="form-control" id="item-search" placeholder="Search for customer..."></input>
+                    <span class="input-group-btn">
+                      <button class="btn btn-outline-secondary"><i class="fa fa-search"></i></button>
+                    </span>
+                </form>
+                <ul class="navbar-nav nav-justified">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fa fas fa-sign-out"></i> Logout</a>
+                    </li>
+                </ul>
+                {#<form class="form-inline" style="text-align: center; margin-left: 90px;">#}
+                    {#<input class="form-control mr-sm-2" style="width: 400px;" type="search" placeholder="Search for customer... " id="search" aria-label="Search">#}
+                    {#<button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Search</button>#}
+                {#</form>#}
+            </form>
+        </nav>
+        <div class="container" style="margin-top: 20px;">
+        {% block body %}
+        {% endblock %}
+
+        </div>
+
+        <!-- jQuery is necessary -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" />
+
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+
+                $('body').on('keypress','#search',function(){
+                    $('#search').siblings('span.input-group-btn').find('i.fa-refresh.fa-spin').removeClass('fa-refresh fa-spin').addClass('fa-search');
+                });
+
+                $('body').on('click','#search',function(){
+                   $(this).val("");
+                });
+
+                $("#search").autocomplete({
+                    source: function( request, response ) {
+                        $.ajax({
+                            url: "{{ path('ajax_search') }}",
+                            data: {
+                                'query' : $("#search").val()
+                            },
+                            dataType: "json",
+                            success: function( data ) {
+                                console.log(data['customers']);
+                                response( data['customers'] );
+                            }
+                        });
+                    },
+                    minLength: 3,
+                    select: function( event, ui ) {
+                        $("#search").val("");
+                        if(ui.item.value == "No customer found, click to create new...") {
+                            location.href = '/customer/new';
+                        } else {
+                            location.href = '/customer/' + ui.item.value;
+                        }
+                    },
+
+                });
+            });
+        </script>
+
     </body>
+    <footer class="fixed-bottom">
+        <div class="footer footer-copyright py-3 text-center bg-dark" style="overflow: hidden; color: white; font-size: .9rem;">
+            © 2018 Copyright: Alkis Petrou
+        </div>
+    </footer>
+
 </html>

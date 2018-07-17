@@ -37,7 +37,7 @@ class Customer
     private $city;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\animal", inversedBy="customers")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Animal", inversedBy="customers")
      */
     private $animals;
 

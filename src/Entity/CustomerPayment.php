@@ -80,4 +80,8 @@ class CustomerPayment
 
         return $this;
     }
+
+    public function __toString() {
+        return $this->paymentType;
+    }
 }

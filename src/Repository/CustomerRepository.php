@@ -47,4 +47,24 @@ class CustomerRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    /*
+     * Function to find customer by either name
+     */
+    public function findCustomerByString($str)
+    {
+        // auto configure to entity Customer, uses c as alias
+        $qb = $this->createQueryBuilder('c');
+        $qb = $qb->where(
+            $qb->expr()->like('c.firstName',':str')
+
+        )
+        ->orWhere(
+            $qb->expr()->like('c.lastName',':str')
+        )
+        ->setParameter('str','%'.$str.'%')
+        ->getQuery()->execute();
+
+        return $qb;
+    }
 }

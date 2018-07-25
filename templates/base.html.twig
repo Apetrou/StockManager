@@ -2,34 +2,13 @@
 <html>
     <head>
         {% block head_js %}
-            <!-- JQUERY -->
-            <script src="http://code.jquery.com/jquery-3.3.1.js"
-                    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-                    crossorigin="anonymous"></script>
-            <!-- BOOTSTRAP JS -->
-            <script src="http://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"
-                    integrity="sha384-u/bQvRA/1bobcXlcEYpsEdFVK/vJs3+T+nXLsBYJthmdBuavHvAW6UsmqO2Gd/F9"
-                    crossorigin="anonymous"></script>
-
-
-            {#<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>#}
+            <script src="{{ asset('build/app.js') }}"></script>
         {% endblock %}
         {% block head_css %}
-            <!-- BOOTSTRAP CSS -->
-            <link href="http://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-                  rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
-                  crossorigin="anonymous">
-            <!-- FA CSS -->
-            <link href="http://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-                  rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-            <!-- DT CSS -->
-            {#<link href="https://cdn.datatables.net/1.10.18/css/dataTables.bootstrap4.min.css"#}
-                  {#rel="stylesheet">#}
-            {#<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">#}
+            <link rel="stylesheet" href="{{ asset('build/app.css') }}">
         {% endblock %}
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark " style="margin-bottom: 30px;">
@@ -74,48 +53,9 @@
         </div>
 
         <!-- jQuery is necessary -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" />
-
-        <script type="text/javascript">
-            jQuery(document).ready(function() {
-
-                $('body').on('keypress','#search',function(){
-                    $('#search').siblings('span.input-group-btn').find('i.fa-refresh.fa-spin').removeClass('fa-refresh fa-spin').addClass('fa-search');
-                });
-
-                $('body').on('click','#search',function(){
-                   $(this).val("");
-                });
-
-                $("#search").autocomplete({
-                    source: function( request, response ) {
-                        $.ajax({
-                            url: "{{ path('ajax_search') }}",
-                            data: {
-                                'query' : $("#search").val()
-                            },
-                            dataType: "json",
-                            success: function( data ) {
-                                console.log(data['customers']);
-                                response( data['customers'] );
-                            }
-                        });
-                    },
-                    minLength: 3,
-                    select: function( event, ui ) {
-                        $("#search").val("");
-                        if(ui.item.value == "No customer found, click to create new...") {
-                            location.href = '/customer/new';
-                        } else {
-                            location.href = '/customer/' + ui.item.value;
-                        }
-                    },
-
-                });
-            });
-        </script>
+        {#<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>#}
+        {#<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>#}
+        {#<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css" />#}
 
     </body>
     <footer class="fixed-bottom">

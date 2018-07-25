@@ -23581,18 +23581,21 @@ $(document).ready(function () {
     });
 
     $("#search").typeahead({
-        source: function source(request, response) {
-            return $.ajax({
-                url: "{{ path('ajax_search') }}",
-                data: {
-                    'query': $("#search").val()
-                },
-                dataType: "json",
-                success: function success(data) {
-                    console.log(data['customers']);
-                    response(data['customers']);
-                }
-            });
+        // source: function( request, response ) {
+        //     return $.ajax({
+        //         url: "{{ path('ajax_search') }}",
+        //         data: {
+        //             'query' : $("#search").val()
+        //         },
+        //         dataType: "json",
+        //         success: function( data ) {
+        //             console.log(data['customers']);
+        //             response( data['customers'] );
+        //         }
+        //     });
+        // },
+        source: {
+            data: ["Alkis", "Palkis"]
         }
         // minLength: 3,
         // select: function( event, ui ) {

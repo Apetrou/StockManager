@@ -36,7 +36,7 @@
                     {#</li>#}
                 </ul>
                 <form class="form-inline" style="text-align: center;">
-                    <input type="text" id="search"  style="width:400px;  margin-left: 90px;" class="form-control" id="item-search" placeholder="Search for customer..."></input>
+                    <input type="text" id="search" href="{{ path('ajax_search') }}"  style="width:400px;  margin-left: 90px;" class="form-control" id="item-search" placeholder="Search for customer..."></input>
                     <span class="input-group-btn">
                       <button class="btn btn-outline-secondary"><i class="fa fa-search"></i></button>
                     </span>
@@ -46,7 +46,7 @@
                         <a class="nav-link"><i class="fas fa-user"></i> {{ app.user.username }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('logout') }}"><i class="fa fas fa-sign-out-alt"></i> Logout</a>
+                        <a class="nav-link btn btn-outline-secondary" href="{{ path('logout') }}"><i class="fa fas fa-sign-out-alt"></i> Logout</a>
                     </li>
                 </ul>
             </form>

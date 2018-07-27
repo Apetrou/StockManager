@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Customer;
+use App\Entity\Product;
 use App\Form\CustomerType;
 use App\Repository\CustomerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -123,7 +124,10 @@ class CustomerController extends Controller
      */
     public function customerPurchaseAction(Customer $customer): Response
     {
-        return $this->render('customer/purchase.html.twig', ['customer' => $customer]);
+        $repo = $this->getDoctrine()->getRepository(Product::class);
+        $products = $repo->findAll();
+
+        return $this->render('customer/purchase.html.twig', ['customer' => $customer, 'products' => $products]);
 //        return $this->redirectToRoute('purchase');
     }
 }

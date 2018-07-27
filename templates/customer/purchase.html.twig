@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Customer purchase{% endblock %}
+
+{% block body %}
+    <h1>
+        <a href="{{ path('customer_show', {'id': customer.id}) }}" class="btn btn-outline-secondary"><i class="fa fas fa-arrow-left"></i></a>
+        Customer - {{ customer.firstName }} {{ customer.lastName }}
+    </h1>
+
+{% endblock %}

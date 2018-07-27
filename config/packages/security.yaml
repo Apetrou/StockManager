@@ -1,0 +1,44 @@
+security:
+    encoders:
+      # passwords in db encoded using bcrypt
+      App\Entity\User:
+        # salt auto taken care of with bcrypt
+        algorithm: bcrypt
+
+
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        # create user provider called our_db_provider that queries from user entity by username property
+        our_db_provider:
+          entity:
+            class: App\Entity\User
+            property: username
+    firewalls:
+
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: ~
+#            during authentication process redirect user to login form
+            form_login:
+              login_path: login
+              check_path: login
+
+              default_target_path: /product
+
+            logout:
+              path: /logout
+              target: /
+
+#            pattern: ^/
+#            http_basic: ~
+#            provider: our_db_provider
+
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+         # only admin users can access the system
+         - { path: ^/customer, roles: ROLE_ADMIN }
+         - { path: ^/product, roles: ROLE_ADMIN }

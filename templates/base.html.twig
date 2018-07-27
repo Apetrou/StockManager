@@ -28,6 +28,9 @@
                     <li class="nav-item {% if 'customer' in app.request.uri %} active {% endif %}">
                         <a class="nav-link" href="/customer"><i class='fa fas fa-users' aria-hidden='true'></i> Customers</a>
                     </li>
+                    {#<li class="nav-item {% if 'purchase' in app.request.uri %} active {% endif %}">#}
+                        {#<a class="nav-link" href="/purchase"><i class='fas fa-euro-sign' aria-hidden='true'></i> Purchase</a>#}
+                    {#</li>#}
                 </ul>
                 <form class="form-inline" style="text-align: center;">
                     <input type="text" id="search"  style="width:400px;  margin-left: 90px;" class="form-control" id="item-search" placeholder="Search for customer..."></input>
@@ -37,7 +40,7 @@
                 </form>
                 <ul class="navbar-nav nav-justified">
                     <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fa fas fa-sign-out-alt"></i> Logout</a>
+                        <a class="nav-link" href="{{ path('logout') }}"><i class="fa fas fa-sign-out-alt"></i> Logout</a>
                     </li>
                 </ul>
                 {#<form class="form-inline" style="text-align: center; margin-left: 90px;">#}

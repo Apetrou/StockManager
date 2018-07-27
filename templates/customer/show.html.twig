@@ -6,7 +6,7 @@
     <h1>
         <a href="{{ path('customer_index') }}" class="btn btn-outline-secondary"><i class="fa fas fa-arrow-left"></i></a>
         Customer - {{ customer.firstName }} {{ customer.lastName }}
-        <button class="btn btn-dark float-right">Make Purchase</button>
+        <a class="btn btn-dark float-right" href="{{ path('customer_purchase', {'id': customer.id}) }}"><i class='fas fa-euro-sign' aria-hidden='true'></i> Make Purchase</a>
     </h1>
 
     <table class="table" id="customerTable">
@@ -60,9 +60,4 @@
 
     <div class="clearfix" style="margin-bottom: 20px"></div>
 
-    <script type="text/javascript">
-        // $(document).ready( function () {
-        //     $('#customerTable').dataTable();
-        // } );
-    </script>
 {% endblock %}

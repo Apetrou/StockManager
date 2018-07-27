@@ -12,10 +12,8 @@ class PurchaseController extends Controller
      */
     public function index()
     {
-//        return $this->render('purchase/index.html.twig', [
-//            'controller_name' => 'PurchaseController',
-//        ]);
+        return $this->render('purchase/index.html.twig', [
+            'controller_name' => 'PurchaseController',
+        ]);
     }
-
-    
 }

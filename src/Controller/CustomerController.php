@@ -9,6 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Controller\PurchaseController;
 
 /**
  * @Route("/customer")
@@ -115,5 +116,14 @@ class CustomerController extends Controller
             $names[$customer->getId()]['label'] = $customer->getFirstName()." ".$customer->getLastName();
         }
         return $names;
+    }
+
+    /**
+     * @Route("/{id}/purchase", name="customer_purchase", methods="GET|POST")
+     */
+    public function customerPurchaseAction(Customer $customer): Response
+    {
+        return $this->render('customer/purchase.html.twig', ['customer' => $customer]);
+//        return $this->redirectToRoute('purchase');
     }
 }

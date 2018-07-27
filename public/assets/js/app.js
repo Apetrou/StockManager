@@ -19,22 +19,23 @@ $(document).ready(function() {
 
 
     $("#search").typeahead({
-        // source: function( request, response ) {
-        //     return $.ajax({
-        //         url: "{{ path('ajax_search') }}",
-        //         data: {
-        //             'query' : $("#search").val()
-        //         },
-        //         dataType: "json",
-        //         success: function( data ) {
-        //             console.log(data['customers']);
-        //             response( data['customers'] );
-        //         }
-        //     });
-        // },
-        source: {
-            data: ["Alkis","Palkis"]
+        source: function(query, process) {
+            return $.ajax({
+                type: "POST",
+                url: "{{ path('ajax_search') }}",
+                data: {
+                    'query' : $("#search").val()
+                },
+                dataType: "json",
+                success: function( data ) {
+                    console.log(data['customers']);
+                    // response( data['customers'] );
+                }
+            });
         },
+        // source: {
+        //     data: ["Alkis","Palkis"]
+        // },
         // minLength: 3,
         // select: function( event, ui ) {
         //     $("#search").val("");

@@ -5,10 +5,28 @@
 {% block body %}
     <h1>
         <a href="{{ path('customer_show', {'id': customer.id}) }}" class="btn btn-outline-secondary"><i class="fa fas fa-arrow-left"></i></a>
-        Customer - {{ customer.firstName }} {{ customer.lastName }}
+        Order For - {{ customer.firstName }} {{ customer.lastName }}
+
+        <div class="dropdown float-right">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-shopping-basket"></i> View Basket
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="view-orders" style="max-height:700px;overflow:auto;width:600px;">
+                <p style="color:white;padding:5px;background-color:#545b62;margin:0px;"><strong>Order Basket</strong></p>
+                <table class="table table-striped" style="" id="order-basket">
+                    <thead>
+                        <th width="70px"></th>
+                        <th>Name</th>
+                        <th>Artifact No.</th>
+                        <th>Quantity</th>
+                        <th class="text-center">Cost (€)</th>
+                    </thead>
+                </table>
+            </div>
+        </div>
     </h1>
 
-    <table class="table table-bordered" id="customerPurchaseTable">
+    <table class="table table-hover table-bordered" id="customerPurchaseTable">
         <thead>
         <tr>
             <th>Name</th>
@@ -30,13 +48,15 @@
                 <td>
                     <div class="input-group">
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
+                            <button type="button" class="btn btn-default btn-number-minus" disabled="disabled" data-type="minus" data-field="quant[1]">
                               <i class="fas fa-minus"></i>
                             </button>
                         </span>
-                        <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" max="10">
+                        <input type="text" name="quant[1]" class="form-control input-number text-center" value="0" min="1" max="{{ product.stock }}" data-id="{{ product.id }}"
+                                data-name="{{ product.name }}" data-artifact-number="{{ product.artifactNumber }}" data-catalogue-page="{{ product.cataloguePage }}"
+                                data-cost="{{ product.cost }}">
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[1]">
+                            <button type="button" class="btn btn-default btn-number-plus" data-type="plus" data-field="quant[1]" data-product-id="{{ product.id }}">
                                <i class="fas fa-plus"></i>
                             </button>
                         </span>
@@ -51,4 +71,39 @@
         </tbody>
     </table>
 
+    <div class="float-right">
+        <button class="btn btn-warning" id="resetOrder"><i class="fas fa-sync-alt"></i> Reset Order</button>
+        <button class="btn btn-success" id="confirmOrder"><i class="fas fa-check"></i> Confirm Order</button>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="confirmOrderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Confirm Order For - {{ customer.firstName }} {{ customer.lastName }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-striped" style="" id="confirm-order-basket">
+                        <thead>
+                        <th>Name</th>
+                        <th>Artifact No.</th>
+                        <th>Quantity</th>
+                        <th class="text-center">Cost (€)</th>
+                        </thead>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="sendOrder">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
+

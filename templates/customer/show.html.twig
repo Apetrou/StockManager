@@ -6,10 +6,11 @@
     <h1>
         <a href="{{ path('customer_index') }}" class="btn btn-outline-secondary"><i class="fa fas fa-arrow-left"></i></a>
         Customer - {{ customer.firstName }} {{ customer.lastName }}
-        <a class="btn btn-dark float-right" href="{{ path('customer_purchase', {'id': customer.id}) }}"><i class='fas fa-euro-sign' aria-hidden='true'></i> Make Purchase</a>
+        <btn class="btn btn-outline-dark"><i class="fas fa-history"></i></btn>
+        <a class="btn btn-dark float-right" href="{{ path('customer_purchase', {'id': customer.id}) }}"><i class='fas fa-euro-sign' aria-hidden='true'></i> Order</a>
     </h1>
 
-    <table class="table" id="customerTable">
+    <table class="table table-hover table-striped" id="customerTable">
         <tbody>
             {#<tr>#}
                 {#<th>Id</th>#}

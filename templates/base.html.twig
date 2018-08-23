@@ -15,41 +15,48 @@
     {% if is_granted('ROLE_ADMIN') %}
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark " style="margin-bottom: 30px;">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <a class="navbar-brand" href="#">Petrou Farming</a>
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li class="nav-item {% if 'product' in app.request.uri %} active {% endif %}">
-                        <a class="nav-link" href="/product"><i class='fa fas fa-archive' aria-hidden='true'></i> Products</a>
-                    </li>
-                    <li class="nav-item {% if 'customer' in app.request.uri %} active {% endif %}">
-                        <a class="nav-link" href="/customer"><i class='fa fas fa-users' aria-hidden='true'></i> Customers</a>
-                    </li>
-                    {#<li class="nav-item {% if 'purchase' in app.request.uri %} active {% endif %}">#}
-                    {#<a class="nav-link" href="/purchase"><i class='fas fa-euro-sign' aria-hidden='true'></i> Purchase</a>#}
-                    {#</li>#}
-                </ul>
-                <form class="form-inline">
-                    <div class="input-group" style="width:300px;" >
-                        <input type="text" id="search" href="{{ path('ajax_search') }}" class="form-control" id="item-search" placeholder="Search for customer..." autocomplete="off"/>
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary"><i class="fa fa-search"></i></button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    {#<a class="navbar-brand" href="#">Petrou Farming</a>#}
+                    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                        <li class="nav-item {% if 'product' in app.request.uri %} active {% endif %}">
+                            <a class="nav-link" href="/product"><i class='fa fas fa-archive' aria-hidden='true'></i> Products</a>
+                        </li>
+                        <li class="nav-item {% if 'customer' in app.request.uri %} active {% endif %}">
+                            <a class="nav-link" href="/customer"><i class='fa fas fa-users' aria-hidden='true'></i> Customers</a>
+                        </li>
+                        <li class="nav-item {% if 'purchase' in app.request.uri %} active {% endif %}">
+                        <a class="nav-link" href="/purchase"><i class='fas fa-euro-sign' aria-hidden='true'></i> Purchase</a>
+                        </li>
+                    </ul>
+                    <form class="form-inline">
+                        <div class="input-group" style="width:300px;" >
+                            <input type="text" id="search" href="{{ path('ajax_search') }}" class="form-control" id="item-search" placeholder="Search for customer..." autocomplete="off"/>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary"><i class="fa fa-search"></i></button>
+                            </div>
                         </div>
-                    </div>
-                </form>
-                <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-                    <li class="nav-item" style="margin-right: 20px;">
-                        <a class="nav-link"><i class="fas fa-user"></i> Welcome, {{ app.user.username }}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-outline-secondary" href="{{ path('logout') }}"><i class="fa fas fa-sign-out-alt"></i> Logout</a>
-                    </li>
-                </ul>
+                    </form>
+                    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                        <li class="nav-item" style="margin-right: 20px;">
+                            <a class="nav-link"><i class="fas fa-user"></i> Welcome, {{ app.user.username }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-outline-secondary" href="{{ path('logout') }}"><i class="fa fas fa-sign-out-alt"></i> Logout</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </nav>
+        {% for message in app.flashes('notice') %}
+            <div class="alert alert-{{ type }} fade in">
+                {{ message }}
+            </div>
+        {% endfor %}
 
     {% endif %}
 
@@ -64,7 +71,7 @@
 
     <footer class="fixed-bottom">
         <div class="footer footer-copyright py-3 text-center bg-dark" style="overflow: hidden; color: white; font-size: .9rem;">
-            © 2018 Copyright: Alkis Petrou
+            © 2018 Copyright: Petrou Farming
         </div>
     </footer>
 

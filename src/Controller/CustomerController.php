@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Customer;
 use App\Entity\Product;
+use App\Entity\ProductOrder;
 use App\Form\CustomerType;
 use App\Repository\CustomerRepository;
+use App\Repository\ProductOrderRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -127,7 +129,20 @@ class CustomerController extends Controller
         $repo = $this->getDoctrine()->getRepository(Product::class);
         $products = $repo->findAll();
 
-        return $this->render('customer/purchase.html.twig', ['customer' => $customer, 'products' => $products]);
+        return $this->render('purchase/purchase.html.twig', ['customer' => $customer, 'products' => $products]);
 //        return $this->redirectToRoute('purchase');
+    }
+
+    /**
+     * @Route("/{id}/order", name="customer_order_log", methods="GET")
+     */
+    public function customerOrderLogAction(Customer $customer): Response
+    {
+        $repo = $this->getDoctrine()->getRepository(ProductOrder::class);
+        $productOrders = $repo->findCustomerOrders($customer);
+
+//        die(print_r($productOrders));
+
+        return $this->render('customer/order-log.html.twig', ['customer' => $customer, 'orders' => $productOrders]);
     }
 }

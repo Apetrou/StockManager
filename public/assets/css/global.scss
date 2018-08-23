@@ -16,4 +16,11 @@ $primary: darken(#428bca, 20%);
   margin: auto;
 }
 
+.page-item.active .page-link {
+  z-index: 1;
+  color: #fff;
+  background-color: #dee2e6;
+  border-color: #245682;
+}
+
 

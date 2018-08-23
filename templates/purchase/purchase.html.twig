@@ -1,19 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Customer purchase{% endblock %}
+{% block title %}Purchase{% endblock %}
 
 {% block body %}
     <h1>
+        {% if customer is defined %}
         <a href="{{ path('customer_show', {'id': customer.id}) }}" class="btn btn-outline-secondary"><i class="fa fas fa-arrow-left"></i></a>
         Order For - {{ customer.firstName }} {{ customer.lastName }}
+        {% else %}
+        Order
+        {% endif %}
 
         <div class="dropdown float-right">
             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-shopping-basket"></i> View Basket
+                <i class="fas fa-shopping-basket"></i> View Basket <span class="badge badge-light basket-badge">0</span>
             </button>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="view-orders" style="max-height:700px;overflow:auto;width:600px;">
                 <p style="color:white;padding:5px;background-color:#545b62;margin:0px;"><strong>Order Basket</strong></p>
-                <table class="table table-striped" style="" id="order-basket">
+                <table class="table table-striped table-borderless" style="" id="order-basket">
                     <thead>
                         <th width="70px"></th>
                         <th>Name</th>
@@ -52,7 +56,7 @@
                               <i class="fas fa-minus"></i>
                             </button>
                         </span>
-                        <input type="text" name="quant[1]" class="form-control input-number text-center" value="0" min="1" max="{{ product.stock }}" data-id="{{ product.id }}"
+                        <input type="text" name="quant[1]" disabled="true" class="form-control input-number text-center" value="0" min="1" max="{{ product.stock }}" data-id="{{ product.id }}"
                                 data-name="{{ product.name }}" data-artifact-number="{{ product.artifactNumber }}" data-catalogue-page="{{ product.cataloguePage }}"
                                 data-cost="{{ product.cost }}">
                         <span class="input-group-btn">
@@ -81,7 +85,11 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Confirm Order For - {{ customer.firstName }} {{ customer.lastName }}</h5>
+                    {% if customer is defined %}
+                        <h5 class="modal-title" id="exampleModalLongTitle">Confirm Order For - {{ customer.firstName }} {{ customer.lastName }}</h5>
+                    {% else %}
+                        <h5 class="modal-title" id="exampleModalLongTitle">Confirm Order</h5>
+                    {% endif %}
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -95,11 +103,13 @@
                         <th class="text-center">Cost (€)</th>
                         </thead>
                     </table>
+                    <tbody>
 
+                    </tbody>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" id="sendOrder">Confirm</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> {#  data-deduct-stock-url="{{ path('product_deduct_stock') }} #}
+                    <button type="button" class="btn btn-success" id="sendOrder" {% if customer is defined %} data-customer-id="{{ customer.id }}" {% endif %} data-send-order-url="{{ path('order_create') }}"> Confirm</button>
                 </div>
             </div>
         </div>

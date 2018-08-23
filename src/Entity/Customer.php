@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -65,6 +67,16 @@ class Customer
      * @ORM\Column(type="string", length=8000, nullable=true)
      */
     private $comments;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductOrder", mappedBy="customer")
+     */
+    private $productOrders;
+
+    public function __construct()
+    {
+        $this->productOrders = new ArrayCollection();
+    }
 
     public function getId()
     {
@@ -187,6 +199,37 @@ class Customer
     public function setComments(?string $comments): self
     {
         $this->comments = $comments;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProductOrder[]
+     */
+    public function getProductOrders(): Collection
+    {
+        return $this->productOrders;
+    }
+
+    public function addProductOrder(ProductOrder $productOrder): self
+    {
+        if (!$this->productOrders->contains($productOrder)) {
+            $this->productOrders[] = $productOrder;
+            $productOrder->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductOrder(ProductOrder $productOrder): self
+    {
+        if ($this->productOrders->contains($productOrder)) {
+            $this->productOrders->removeElement($productOrder);
+            // set the owning side to null (unless already changed)
+            if ($productOrder->getCustomer() === $this) {
+                $productOrder->setCustomer(null);
+            }
+        }
 
         return $this;
     }

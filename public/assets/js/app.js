@@ -11,6 +11,8 @@ require('datatables.net-bs4/js/dataTables.bootstrap4')
 
 $(document).ready(function() {
 
+    $('[data-toggle="tooltip"]').tooltip();
+
     /*
         CREATE ALL DATATABLES
      */
@@ -38,6 +40,24 @@ $(document).ready(function() {
         paginate: false,
     } );
 
+    $('#customerOrderTable').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            { extend:'copy', attr: { id: 'allan' } }, 'csv', 'excel', 'pdf', 'print'
+        ],
+        // paginate: false,
+    } );
+
+    // Add slideDown animation to Bootstrap dropdown when expanding.
+    $('.dropdown').on('show.bs.dropdown', function() {
+        $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+    });
+
+    // Add slideUp animation to Bootstrap dropdown when collapsing.
+    $('.dropdown').on('hide.bs.dropdown', function() {
+        $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+    });
+
     // $('#customerPurchaseTable').DataTable( {
     //     dom: 'Bfrtip',
     //     buttons: [
@@ -62,7 +82,6 @@ $(document).ready(function() {
     //     },
     //     bfilter: false,
     // } );
-
 
     $('[data-toggle="popover"]').popover();
 
@@ -150,6 +169,12 @@ $(document).ready(function() {
         if($quantityField.val() < $quantityField.prop('max')) {
             plusButton.prop('disabled',false);
         }
+
+        var $item = {"id":$quantityField.data("id"), "name":$quantityField.data("name"),
+            "artifactNumber":$quantityField.data('artifact-number'), "cataloguePage":$quantityField.data('catalogue-page'),
+            "cost":$quantityField.data('cost')};
+
+        removeOrderItemFromBasket($item);
     });
 
     $('body').on('click','#confirmOrder',function (e) {
@@ -164,7 +189,7 @@ $(document).ready(function() {
         if(orders.length > 0) {
             $('#confirmOrderModal').modal('show');
             $.each(orders,function () {
-                var row = '<tr data-id="'+$(this)[0].id+'"><td>'+$(this)[0].name+'</td><td>'+$(this)[0].artifactNumber+'</td><td>'+$(this)[0].quantity+'</td><td>'+$(this)[0].cost+'</td></tr>';
+                var row = '<tr class="order" data-id="'+$(this)[0].id+'" data-quantity="'+$(this)[0].quantity+'" data-cost="'+$(this)[0].cost+'"><td>'+$(this)[0].name+'</td><td>'+$(this)[0].artifactNumber+'</td><td>'+$(this)[0].quantity+'</td><td>'+$(this)[0].cost+'</td></tr>';
                 $('#confirm-order-basket').append(row);
             });
         } else {
@@ -181,6 +206,51 @@ $(document).ready(function() {
     });
 
     $('body').on('click','#sendOrder',function () {
+        $(this).prepend('<i class="fas fa-spinner spin fa-spin"></i>');
+        $(this).prop('disabled','disabled');
+
+        var orderItems = [];
+        var sendOrderUrl = $(this).data('send-order-url');
+        var deductStockUrl = $(this).data('deduct-stock-url');
+        var customerId;
+
+        $('#confirm-order-basket tr.order').each(function () {
+            var orderItem = {};
+            orderItem.productId = $(this).data('id');
+            orderItem.productQuantity = $(this).data('quantity');
+            orderItem.cost = $(this).data('cost');
+            orderItems.push((orderItem));
+        });
+
+        var order = {};
+
+        if($(this).data('customer-id')) {
+            order = {"customerId" : $(this).data('customer-id'), "orderItems" : JSON.stringify(orderItems)};
+        } else {
+            order = {"customerId" : $(this).data('customer-id'), "orderItems" : JSON.stringify(orderItems)};
+        }
+
+        // $.each(orders, function () {
+            $.ajax({
+                type: "POST",
+                url: sendOrderUrl,
+                data: order,
+                dataType: "JSON",
+                async: false,
+                success: function(result){
+                    // deduct stock
+                    // var data = {""}
+                    // $.post(deductStockUrl, function (data) {
+                    //
+                    // });
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+
+                },
+            });
+      //  });
+
+        // window.location.reload();
 
     });
 
@@ -208,8 +278,33 @@ function addOrderItemToBasket($item) {
         var row = '<tr class="basketItem" data-id="'+$item.id+'"><td></td><td class="basket-name">'+$item.name+'</td><td class="basket-artifact-number">'+$item.artifactNumber+'</td><td class="basket-quantity">1</td><td class="basket-cost">'+$item.cost+'</td></tr>';
         $('#order-basket').append(row);
     }
+    $('.basket-badge').html(parseInt($('.basket-badge').html()) + 1);
 }
 
 function removeOrderItemFromBasket($item) {
-
+    $('#order-basket tr.basketItem').each(function () {
+        if($(this).data('id') == $item.id) {
+            existing = true;
+            var currentQuantity = $(this).find('.basket-quantity').html();
+            // REMOVE FROM BASKET
+            if(currentQuantity == 1) {
+                $(this).remove();
+            } else {
+                var newQuantity = parseInt(currentQuantity) - 1
+                $(this).find('.basket-quantity').html(newQuantity);
+                var currentPrice = $(this).find('.basket-cost').html();
+                var newPrice = parseFloat(currentPrice) * newQuantity;
+                $(this).find('.basket-cost').html(newPrice);
+            }
+        }
+        $('.basket-badge').html(parseInt($('.basket-badge').html()) - 1);
+    });
 }
+
+// function incrementBasketBadge() {
+//     $('.basket-badge').html(parent(('.basket-badge').html()) + 1);
+// }
+//
+// function decrementBasketBadge() {
+//     $('.basket-badge').html(parent(('.basket-badge').html()) - 1);
+// }

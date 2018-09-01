@@ -1,26 +1,51 @@
 // assets/css/global.scss
 
 // customize some Bootstrap variables
-$primary: darken(#428bca, 20%);
+//$primary: darken(#428bca, 20%);
 
-// the ~ allows you to reference things in node_modules
 @import "~bootstrap/scss/bootstrap";
-
 @import "autocomplete.css";
+@import "login.css";
+@import "navbar.css";
+@import "alert.css";
 
-.navbar-center
-{
-  position: absolute;
-  width: 100%;
-  text-align: center;
-  margin: auto;
+.main-container {
+  margin-top: 20px;
+  margin-bottom: 120px;
+}
+
+body {
+  margin-bottom: 40px;
+}
+
+.dropdown-menu {
+  padding: 0;
+}
+
+.hoverable {
+  cursor: pointer;
+}
+
+// DATATABLES
+a.paginate_button {
+  // override font-color here.
+}
+
+.pagination {
+  justify-content: center;
+}
+.page-link {
+  color: black;
 }
 
 .page-item.active .page-link {
-  z-index: 1;
-  color: #fff;
-  background-color: #dee2e6;
-  border-color: #245682;
+  background-color: #343a40;
+  border-color: black;
 }
+a.paginate_button.current {
+  // override current page button styling here.
+}
+
+
 
 

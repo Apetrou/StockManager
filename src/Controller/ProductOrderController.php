@@ -12,14 +12,31 @@ use App\Entity\Customer;
 use App\Entity\Product;
 use App\Entity\ProductOrder;
 use App\Entity\ProductOrderItem;
+use App\Manager\StockManager;
+use App\Manager\ExcelManager;
+use http\Exception;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use App\Entity\Order;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class ProductOrderController extends Controller
 {
+
+    protected $stockManager;
+
+    protected $excelManager;
+
+    public function __construct(StockManager $stockManager, ExcelManager $excelManager)
+    {
+        $this->stockManager = $stockManager;
+        $this->excelManager = $excelManager;
+    }
+
     /**
      * @Route("/order/create", name="order_create")
      */
@@ -28,12 +45,17 @@ class ProductOrderController extends Controller
         $em = $this->getDoctrine()->getManager();
         $em->getConnection()->beginTransaction();
 
-        $customerId = $request->request->get('customerId', null);
-        $productOrderItems = $request->request->get('orderItems');
+        $requestData = json_decode($request->getContent(),true);
+
+        $customerId = $requestData['customerId'];
+        $productOrderItems = $requestData['orderItems'];
 
         try {
-            $customer =  $em->getRepository(Customer::class)->find($customerId);
-            $productOrderItems = json_decode($productOrderItems, true);
+            if(!is_null($customerId)) {
+                $customer =  $em->getRepository(Customer::class)->find($customerId);
+            } else {
+                $customer = null;
+            }
 
             $productOrder = new ProductOrder($customer);
 
@@ -41,6 +63,7 @@ class ProductOrderController extends Controller
                 $product = $em->getRepository(Product::class)->find($productOrderItem['productId']);
                 $orderItem = new ProductOrderItem($product, $productOrderItem['productQuantity'], $productOrderItem['cost']);
                 $productOrder->addProductOrderItem($orderItem);
+                $this->stockManager->deductStock($product, $productOrderItem['productQuantity']);
             }
 
             $em->persist($productOrder);
@@ -48,6 +71,10 @@ class ProductOrderController extends Controller
 
             $em->getConnection()->commit();
 
+            $this->addFlash(
+                'success',
+                'Your order has been generated.'
+            );
 
 
         } catch (Exception $e) {
@@ -58,18 +85,11 @@ class ProductOrderController extends Controller
                 'Order failed.'
             );
 
-            return $e->getMessage();
+            return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-//        try {
-//            // DEDUCT STOCK REGISTERED AS SERVICE
-//        } catch(Exception $e) {
-//            $em->getConnection()->rollBack();
-//            return $e->getMessage();
-//        }
-
-        return $this->redirectToRoute('home');
-//        return true;
+        return $this->excelManager->generateInvoice($productOrder, $this->get('phpexcel'));
+//        return $this->generateExcelInvoice($productOrder);
     }
 
     /**
@@ -88,9 +108,25 @@ class ProductOrderController extends Controller
 
     }
 
-    public function generateInvoice()
+    /**
+     * @Route("/purchase/order/log", name="order_log", methods="GET")
+     */
+    public function orderLogAction(): Response
     {
-        $phpExcelObject = $this->get('phpexcel')->createPHPExcelObject('file.xls');
+        $repo = $this->getDoctrine()->getRepository(ProductOrder::class);
+        $productOrders = $repo->findAll();
 
+        return $this->render('purchase/order-log.html.twig', ['orders' => $productOrders]);
+    }
+
+    /**
+     * @Route("/invoice/{id}", name="generate_invoice")
+     */
+    public function customerInvoiceAction(ProductOrder $productOrder): Response
+    {
+        $repo = $this->getDoctrine()->getRepository(ProductOrder::class);
+        $productOrder = $repo->find($productOrder->getId());
+
+        return $this->excelManager->generateInvoice($productOrder, $this->get('phpexcel'));
     }
 }

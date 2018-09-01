@@ -3,8 +3,8 @@
 {% block title %}Product{% endblock %}
 
 {% block body %}
-    <h1>
-        <a href="{{ path('product_index') }}" class="btn btn-outline-secondary"><i class="fa fas fa-arrow-left"></i></a>
+    <h1 class="form-inline">
+        <a href="{{ path('product_index') }}" class="btn btn-outline-secondary back-button"><i class="fa fas fa-arrow-left"></i></a>
         Product - {{ product.name }}
     </h1>
 
@@ -19,11 +19,11 @@
                 <td>{{ product.name }}</td>
             </tr>
             <tr>
-                <th>ArtifactNumber</th>
+                <th>Artifact Number</th>
                 <td>{{ product.artifactNumber }}</td>
             </tr>
             <tr>
-                <th>CataloguePage</th>
+                <th>Catalogue Page</th>
                 <td>{{ product.cataloguePage }}</td>
             </tr>
             <tr>

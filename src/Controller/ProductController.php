@@ -47,6 +47,11 @@ class ProductController extends Controller
             $em->persist($product);
             $em->flush();
 
+            $this->addFlash(
+                'success',
+                'Product added!'
+            );
+
             return $this->redirectToRoute('product_index');
         }
 
@@ -75,7 +80,12 @@ class ProductController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('product_edit', ['id' => $product->getId()]);
+            $this->addFlash(
+                'success',
+                'Your changes were saved!'
+            );
+
+            return $this->redirectToRoute('product_index');
         }
 
         return $this->render('product/edit.html.twig', [

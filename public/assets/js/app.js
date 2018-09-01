@@ -1,5 +1,4 @@
 // REQUIRE ANY CSS THROUGH THE JS FILE
-require('../css/global.scss');
 const $ = require('jquery');
 require('bootstrap');
 require('webpack-jquery-ui');
@@ -7,7 +6,8 @@ require('webpack-jquery-ui/css');
 // require('typeahead.js');
 require('@fortawesome/fontawesome-free/js/all.js');
 require('datatables.net-dt');
-require('datatables.net-bs4/js/dataTables.bootstrap4')
+require('datatables.net-bs4/js/dataTables.bootstrap4');
+require('../css/global.scss');
 
 $(document).ready(function() {
 
@@ -16,20 +16,37 @@ $(document).ready(function() {
     /*
         CREATE ALL DATATABLES
      */
+    $('#orderLogTable').DataTable( {
+        dom: 'Bfrtip',
+        buttons: [
+            { extend:'copy', attr: { id: 'allan' } }, 'csv', 'excel', 'pdf', 'print'
+        ],
+        bInfo: false,
+        paginate: true,
+        pageLength: 5,
+        order: [[ 0, "desc" ]]
+    } );
+
+
     $('#productTable').DataTable( {
         dom: 'Bfrtip',
         buttons: [
             { extend:'copy', attr: { id: 'allan' } }, 'csv', 'excel', 'pdf', 'print'
         ],
-        paginate: false,
+        bInfo: false,
+        paginate: true,
+        pageLength: 5
     } );
 
     $('#customerTable').DataTable( {
         dom: 'Bfrtip',
+        bInfo : false,
         buttons: [
             { extend:'copy', attr: { id: 'allan' } }, 'csv', 'excel', 'pdf', 'print'
         ],
-        paginate: false,
+        bInfo: false,
+        paginate: true,
+        pageLength: 5
     } );
 
     $('#customerPurchaseTable').DataTable( {
@@ -37,7 +54,9 @@ $(document).ready(function() {
         buttons: [
             { extend:'copy', attr: { id: 'allan' } }, 'csv', 'excel', 'pdf', 'print'
         ],
-        paginate: false,
+        bInfo: false,
+        paginate: true,
+        pageLength: 5
     } );
 
     $('#customerOrderTable').DataTable( {
@@ -45,7 +64,10 @@ $(document).ready(function() {
         buttons: [
             { extend:'copy', attr: { id: 'allan' } }, 'csv', 'excel', 'pdf', 'print'
         ],
-        // paginate: false,
+        bInfo: false,
+        paginate: true,
+        pageLength: 5,
+        order: [[ 0, "desc" ]]
     } );
 
     // Add slideDown animation to Bootstrap dropdown when expanding.
@@ -56,6 +78,12 @@ $(document).ready(function() {
     // Add slideUp animation to Bootstrap dropdown when collapsing.
     $('.dropdown').on('hide.bs.dropdown', function() {
         $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+    });
+
+    // GIVE SUBMIT BUTTONS A LOADING ICON
+    $('body').on('submit','form',function(){
+        $(this).find('.btn-success').prepend('<i class="fas fa-spinner spin fa-spin"></i> ');
+        $(this).find('.btn-success').prop('disabled','disabled');
     });
 
     // $('#customerPurchaseTable').DataTable( {
@@ -133,13 +161,14 @@ $(document).ready(function() {
         var $quantityField = $(this).parent().prev();
         var minusButton = $(this).parent().prev().prev().children();
 
-        $quantityField.val(parseInt($quantityField.val()) + 1);
-
         if($quantityField.val() == $quantityField.prop('max')) {
             $(this).prop('disabled','disabled');
+            return false;
         } else {
             $(this).prop('disabled',false);
         }
+
+        $quantityField.val(parseInt($quantityField.val()) + 1);
 
         if($quantityField.val() > 0) {
             minusButton.prop('disabled',false);
@@ -147,9 +176,9 @@ $(document).ready(function() {
             minusButton.prop('disabled','disabled');
         }
 
-        var $item = {"id":$quantityField.data("id"), "name":$quantityField.data("name"),
-            "artifactNumber":$quantityField.data('artifact-number'), "cataloguePage":$quantityField.data('catalogue-page'),
-            "cost":$quantityField.data('cost')};
+        var $item = {'id':$quantityField.data("id"), 'name':$quantityField.data("name"),
+            'artifactNumber':$quantityField.data('artifact-number'), 'cataloguePage':$quantityField.data('catalogue-page'),
+            'cost':$quantityField.data('cost')};
 
         addOrderItemToBasket($item);
     });
@@ -174,7 +203,18 @@ $(document).ready(function() {
             "artifactNumber":$quantityField.data('artifact-number'), "cataloguePage":$quantityField.data('catalogue-page'),
             "cost":$quantityField.data('cost')};
 
-        removeOrderItemFromBasket($item);
+        removeOrderItemFromBasket($item, 1);
+    });
+
+    $('body').on('click','.remove-basket-item', function () {
+        if(confirm('Click OK to confirm.')) {
+
+            var item = $(this).data('item');
+            var quantity = $(this).parent().parent().children('.basket-quantity').html();
+
+            removeOrderItemFromBasket(item, quantity)
+
+        }
     });
 
     $('body').on('click','#confirmOrder',function (e) {
@@ -187,10 +227,10 @@ $(document).ready(function() {
         });
 
         if(orders.length > 0) {
-            $('#confirmOrderModal').modal('show');
+            $('#confirmOrderModal').modal({backdrop: 'static', keyboard: false});
             $.each(orders,function () {
-                var row = '<tr class="order" data-id="'+$(this)[0].id+'" data-quantity="'+$(this)[0].quantity+'" data-cost="'+$(this)[0].cost+'"><td>'+$(this)[0].name+'</td><td>'+$(this)[0].artifactNumber+'</td><td>'+$(this)[0].quantity+'</td><td>'+$(this)[0].cost+'</td></tr>';
-                $('#confirm-order-basket').append(row);
+                var row = '<tr class="order" data-id="'+$(this)[0].id+'" data-quantity="'+$(this)[0].quantity+'" data-cost="'+$(this)[0].cost+'"><td>'+$(this)[0].name+'</td><td>'+$(this)[0].artifactNumber+'</td><td>'+$(this)[0].quantity+'</td><td>€ '+$(this)[0].cost+'</td></tr>';
+                $('#confirm-order-basket tbody').append(row);
             });
         } else {
             alert('No orders in basket.');
@@ -214,7 +254,7 @@ $(document).ready(function() {
         var deductStockUrl = $(this).data('deduct-stock-url');
         var customerId;
 
-        $('#confirm-order-basket tr.order').each(function () {
+        $('#confirm-order-basket tbody tr.order').each(function () {
             var orderItem = {};
             orderItem.productId = $(this).data('id');
             orderItem.productQuantity = $(this).data('quantity');
@@ -225,38 +265,74 @@ $(document).ready(function() {
         var order = {};
 
         if($(this).data('customer-id')) {
-            order = {"customerId" : $(this).data('customer-id'), "orderItems" : JSON.stringify(orderItems)};
+            order = {"customerId" : $(this).data('customer-id'), "orderItems" : orderItems};
         } else {
-            order = {"customerId" : $(this).data('customer-id'), "orderItems" : JSON.stringify(orderItems)};
+            order = {"customerId" : null, "orderItems" : orderItems};
         }
 
-        // $.each(orders, function () {
-            $.ajax({
-                type: "POST",
-                url: sendOrderUrl,
-                data: order,
-                dataType: "JSON",
-                async: false,
-                success: function(result){
-                    // deduct stock
-                    // var data = {""}
-                    // $.post(deductStockUrl, function (data) {
-                    //
-                    // });
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
+        var request = new XMLHttpRequest();
+        request.open('POST', sendOrderUrl, true);
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        request.responseType = 'blob';
+        var fileName = "";
 
-                },
-            });
-      //  });
+        request.onload = function(e) {
 
-        // window.location.reload();
+            if (this.status === 200) {
+                var blob = this.response;
+                if(window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveBlob(blob, "invoice.xlsx");
+                }
+                else{
+                    var downloadLink = window.document.createElement('a');
+                    var link = window.URL.createObjectURL(new Blob([blob], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel' }));
+                    var downloadLink = $('<a class="btn btn-success text-white" href="'+link+'"><i class="fas fa-download"></i> Download Invoice</a>');
+                    var contentTypeHeader = request.getResponseHeader("Content-Type");
 
+                    $('#sendOrder').replaceWith(downloadLink);
+                    $('#confirmOrderModal').on('hidden.bs.modal', function () {
+                        window.location.reload();
+                    })
+                }
+            }
+        };
+        request.send(JSON.stringify(order));
     });
 
     $('#confirmOrderModal').on('hidden.bs.modal', function () {
-        $('#confirm-order-basket').empty();
+        $('#confirm-order-basket tbody').empty();
     })
+
+    // ORDER LOG PAGES
+    $('body').on('click','.download-invoice',function () {
+        var generateInvoiceUrl = $(this).prop('href');
+
+        var request = new XMLHttpRequest();
+        request.open('POST', generateInvoiceUrl, true);
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        request.responseType = 'blob';
+        var fileName = "";
+
+        request.onload = function(e) {
+
+            if (this.status === 200) {
+                var blob = this.response;
+                if(window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveBlob(blob, "invoice.xlsx");
+                }
+                else{
+                    var downloadLink = window.document.createElement('a');
+                    var contentTypeHeader = request.getResponseHeader("Content-Type");
+                    var link = window.URL.createObjectURL(new Blob([blob], { type: contentTypeHeader }));
+                    // var link = window.URL.createObjectURL(new Blob([blob], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel' }));
+                    var downloadLink = $('<a class="btn btn-success text-white" href="'+link+'"><i class="fas fa-download"></i> Download Invoice</a>');
+
+                    $(this).replaceWith(downloadLink);
+                }
+            }
+        };
+        request.send();
+    });
 });
 
 function addOrderItemToBasket($item) {
@@ -275,30 +351,31 @@ function addOrderItemToBasket($item) {
     });
 
     if(!existing) {
-        var row = '<tr class="basketItem" data-id="'+$item.id+'"><td></td><td class="basket-name">'+$item.name+'</td><td class="basket-artifact-number">'+$item.artifactNumber+'</td><td class="basket-quantity">1</td><td class="basket-cost">'+$item.cost+'</td></tr>';
+        var row = "<tr class='basketItem' data-id='"+$item.id+"'><td><i data-item='"+JSON.stringify($item)+"' class='fas fa-trash-alt hoverable remove-basket-item'></i></td><td class='basket-name'>"+$item.name+"</td><td class='basket-artifact-number'>"+$item.artifactNumber+"</td><td class='basket-quantity'>1</td><td class='basket-cost'>"+$item.cost+"</td></tr>";
+        $(row).data('item',JSON.stringify($item));
         $('#order-basket').append(row);
     }
     $('.basket-badge').html(parseInt($('.basket-badge').html()) + 1);
 }
 
-function removeOrderItemFromBasket($item) {
+function removeOrderItemFromBasket(item, quantity) {
     $('#order-basket tr.basketItem').each(function () {
-        if($(this).data('id') == $item.id) {
+        if($(this).data('id') == item.id) {
             existing = true;
             var currentQuantity = $(this).find('.basket-quantity').html();
             // REMOVE FROM BASKET
-            if(currentQuantity == 1) {
+            if(currentQuantity == quantity) {
                 $(this).remove();
             } else {
-                var newQuantity = parseInt(currentQuantity) - 1
+                var newQuantity = parseInt(currentQuantity) - quantity
                 $(this).find('.basket-quantity').html(newQuantity);
                 var currentPrice = $(this).find('.basket-cost').html();
                 var newPrice = parseFloat(currentPrice) * newQuantity;
                 $(this).find('.basket-cost').html(newPrice);
             }
         }
-        $('.basket-badge').html(parseInt($('.basket-badge').html()) - 1);
     });
+    $('.basket-badge').html(parseInt($('.basket-badge').html()) - quantity);
 }
 
 // function incrementBasketBadge() {

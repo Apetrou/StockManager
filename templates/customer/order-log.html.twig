@@ -4,17 +4,14 @@
 
 {% block body %}
     <h1>
-        <a href="{{ path('customer_index') }}" class="btn btn-outline-secondary"><i class="fa fas fa-arrow-left"></i></a>
+        <a href="{{ path('customer_show', {'id': customer.id}) }}" class="btn btn-outline-secondary"><i class="fa fas fa-arrow-left"></i></a>
         Order Log - {{ customer.firstName }} {{ customer.lastName }}
     </h1>
 
     <table class="table table-hover table-striped" id="customerOrderTable">
         <thead>
             <tr>
-                <th>Order</th>
-                {#<th>Product</th>#}
-                {#<th>Quantity</th>#}
-                {#<th>Cost</th>#}
+                <th>Order number</th>
                 <th>Date</th>
                 <th></th>
             </tr>
@@ -23,11 +20,8 @@
         {% for order in orders %}
             <tr>
                 <td>{{ order.id }}</td>
-                {#<td>{{ order.product.name }}</td>#}
-                {#<td>{{ order.productOrderQuantity }}</td>#}
-                {#<td>{{ order.cost }}</td>#}
                 <td>{{ order.orderDate | date("m/d/Y") }}</td>
-                <td><button class="btn btn-success" data-toggle="tooltip" title="print invoice"><i class="fas fa-receipt"></i></button></td>
+                <td><a href="{{ path('generate_customer_invoice', {'id': order.id}) }}" class="btn btn-success download-invoice" data-toggle="tooltip" title="print invoice" h><i class="fas fa-receipt"></i></a></td>
             </tr>
         {% endfor %}
         </tbody>

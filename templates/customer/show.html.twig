@@ -5,9 +5,9 @@
 {% block body %}
     <h1>
         <a href="{{ path('customer_index') }}" class="btn btn-outline-secondary"><i class="fa fas fa-arrow-left"></i></a>
-        Customer - {{ customer.firstName }} {{ customer.lastName }}
-        <a class="btn btn-outline-dark" href="{{ path('customer_order_log', {'id': customer.id}) }}"><i class="fas fa-history"></i></a>
-        <a class="btn btn-dark float-right" href="{{ path('customer_purchase', {'id': customer.id}) }}"><i class='fas fa-euro-sign' aria-hidden='true'></i> Order</a>
+        <span>Customer - {{ customer.firstName }} {{ customer.lastName }}</span>
+        <a class="btn btn-outline-dark float" href="{{ path('customer_order_log', {'id': customer.id}) }}"><i class="fas fa-history"></i></a>
+        <a class="btn btn-dark float-right" href="{{ path('customer_purchase', {'id': customer.id}) }}">Place order</a>
     </h1>
 
     <table class="table table-hover table-striped" id="customerTable">
@@ -17,11 +17,11 @@
                 {#<td>{{ customer.id }}</td>#}
             {#</tr>#}
             <tr>
-                <th>FirstName</th>
+                <th>First Name</th>
                 <td>{{ customer.firstName }}</td>
             </tr>
             <tr>
-                <th>LastName</th>
+                <th>Last Name</th>
                 <td>{{ customer.lastName }}</td>
             </tr>
             <tr>
@@ -33,11 +33,11 @@
                 <td>{{ customer.city }}</td>
             </tr>
             <tr>
-                <th>TelephoneNumber</th>
+                <th>Telephone Number</th>
                 <td>{{ customer.telephoneNumber }}</td>
             </tr>
             <tr>
-                <th>ShippingMethod</th>
+                <th>Shipping Method</th>
                 <td>{{ customer.shippingMethod }}</td>
             </tr>
             <tr>

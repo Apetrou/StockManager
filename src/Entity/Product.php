@@ -74,7 +74,7 @@ class Product
         return $this->id;
     }
 
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -86,7 +86,7 @@ class Product
         return $this;
     }
 
-    public function getArtifactNumber(): int
+    public function getArtifactNumber(): ?int
     {
         return $this->artifactNumber;
     }
@@ -98,7 +98,7 @@ class Product
         return $this;
     }
 
-    public function getCategory(): ProductCategory
+    public function getCategory(): ?ProductCategory
     {
         return $this->category;
     }
@@ -110,7 +110,7 @@ class Product
         return $this;
     }
 
-    public function getCataloguePage(): int
+    public function getCataloguePage(): ?int
     {
         return $this->cataloguePage;
     }
@@ -122,7 +122,7 @@ class Product
         return $this;
     }
 
-    public function getQuantity(): string
+    public function getQuantity(): ?string
     {
         return $this->quantity;
     }
@@ -134,7 +134,7 @@ class Product
         return $this;
     }
 
-    public function getCost(): float
+    public function getCost(): ?float
     {
         return $this->cost;
     }
@@ -146,7 +146,7 @@ class Product
         return $this;
     }
 
-    public function getComments(): string
+    public function getComments(): ?string
     {
         return $this->comments;
     }
@@ -158,7 +158,7 @@ class Product
         return $this;
     }
 
-    public function getStock(): int
+    public function getStock(): ?int
     {
         return $this->stock;
     }
@@ -173,7 +173,7 @@ class Product
     /**
      * @return Collection|ProductOrderItem[]
      */
-    public function getProductOrderItems(): Collection
+    public function getProductOrderItems(): ?Collection
     {
         return $this->productOrderItems;
     }

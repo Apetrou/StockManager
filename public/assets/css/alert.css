@@ -1,0 +1,16 @@
+/*body {*/
+    /*padding-top: 50px;*/
+/*}*/
+
+div.alert-info {
+    position: relative;
+}
+
+div.alert-success p.pull-left {
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    position: absolute;
+    top: 50%;
+}

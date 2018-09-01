@@ -1,0 +1,19 @@
+.navbar-center
+{
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    margin: auto;
+}
+
+.page-item.active .page-link {
+    z-index: 1;
+    color: #fff;
+    background-color: #dee2e6;
+    border-color: #245682;
+}
+
+.back-button {
+    margin-right: 20px;
+}
+

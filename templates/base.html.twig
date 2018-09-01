@@ -8,6 +8,8 @@
             <link rel="stylesheet" href="{{ asset('build/app.css') }}">
         {% endblock %}
         <meta charset="UTF-8">
+        <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+        <link rel="icon" href="{{ asset('assets/icons/favicon-bar-chart.ico') }}">
         <title>{% block title %}Welcome!{% endblock %}</title>
     </head>
     <body>
@@ -24,13 +26,13 @@
                     {#<a class="navbar-brand" href="#">Petrou Farming</a>#}
                     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                         <li class="nav-item {% if 'product' in app.request.uri %} active {% endif %}">
-                            <a class="nav-link" href="/product"><i class='fa fas fa-archive' aria-hidden='true'></i> Products</a>
+                            <a class="nav-link" href="/product">Products</a>
                         </li>
                         <li class="nav-item {% if 'customer' in app.request.uri %} active {% endif %}">
-                            <a class="nav-link" href="/customer"><i class='fa fas fa-users' aria-hidden='true'></i> Customers</a>
+                            <a class="nav-link" href="/customer">Customers</a>
                         </li>
                         <li class="nav-item {% if 'purchase' in app.request.uri %} active {% endif %}">
-                        <a class="nav-link" href="/purchase"><i class='fas fa-euro-sign' aria-hidden='true'></i> Purchase</a>
+                        <a class="nav-link" href="/purchase">Purchase</a>
                         </li>
                     </ul>
                     <form class="form-inline">
@@ -46,21 +48,27 @@
                             <a class="nav-link"><i class="fas fa-user"></i> Welcome, {{ app.user.username }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link btn btn-outline-secondary" href="{{ path('logout') }}"><i class="fa fas fa-sign-out-alt"></i> Logout</a>
+                            <a class="nav-link btn btn-outline-secondary" href="{{ path('logout') }}">Logout</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-        {% for message in app.flashes('notice') %}
-            <div class="alert alert-{{ type }} fade in">
-                {{ message }}
-            </div>
-        {% endfor %}
 
     {% endif %}
 
-        <div class="container" style="margin-top: 20px;">
+        <div class="container main-container">
+            {% for label, messages in app.flashes(['warning', 'danger', 'success']) %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                        <strong>{{ label|capitalize }}!</strong> {{ message }}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
             {% block body %}
             {% endblock %}
         </div>
@@ -72,6 +80,7 @@
     <footer class="fixed-bottom">
         <div class="footer footer-copyright py-3 text-center bg-dark" style="overflow: hidden; color: white; font-size: .9rem;">
             © 2018 Copyright: Petrou Farming
+            {#© 2018 Copyright: Petrou Farming#}
         </div>
     </footer>
 

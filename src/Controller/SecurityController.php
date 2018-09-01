@@ -14,6 +14,10 @@ class SecurityController extends Controller
      */
     public function login(Request $request, AuthenticationUtils $authenticationUtils)
     {
+        if($this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('product_index', array(), 301);
+        }
+
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 

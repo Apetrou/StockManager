@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Customer;
 use App\Entity\Product;
 use App\Entity\ProductOrder;
+use App\Entity\ProductOrderItem;
 use App\Form\CustomerType;
 use App\Repository\CustomerRepository;
 use App\Repository\ProductOrderRepository;
@@ -13,12 +14,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Controller\PurchaseController;
+use App\Manager\ExcelManager;
 
 /**
  * @Route("/customer")
  */
 class CustomerController extends Controller
 {
+    protected $excelManager;
+
+    public function __construct(ExcelManager $excelManager)
+    {
+        $this->excelManager = $excelManager;
+    }
+
     /**
      * @Route("/", name="customer_index", methods="GET")
      */
@@ -40,6 +49,11 @@ class CustomerController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($customer);
             $em->flush();
+
+            $this->addFlash(
+                'success',
+                'Customer has been added.'
+            );
 
             return $this->redirectToRoute('customer_index');
         }
@@ -68,6 +82,11 @@ class CustomerController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash(
+                'success',
+                'Your changes were saved!'
+            );
 
             return $this->redirectToRoute('customer_edit', ['id' => $customer->getId()]);
         }
@@ -141,8 +160,17 @@ class CustomerController extends Controller
         $repo = $this->getDoctrine()->getRepository(ProductOrder::class);
         $productOrders = $repo->findCustomerOrders($customer);
 
-//        die(print_r($productOrders));
-
         return $this->render('customer/order-log.html.twig', ['customer' => $customer, 'orders' => $productOrders]);
+    }
+
+    /**
+     * @Route("/invoice/{id}", name="generate_customer_invoice", methods="GET")
+     */
+    public function customerInvoiceAction(ProductOrder $productOrder): Response
+    {
+        $repo = $this->getDoctrine()->getRepository(ProductOrder::class);
+        $productOrder = $repo->find($productOrder->getId());
+
+        return $this->excelManager->generateInvoice($productOrder, $this->get('phpexcel'));
     }
 }

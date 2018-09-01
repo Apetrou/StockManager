@@ -8,12 +8,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 class HomeController extends Controller
 {
     /**
-     * @Route("/home", name="home")
+     * @Route("/", name="home")
      */
     public function index()
     {
-        return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
-        ]);
+        if($this->isGranted('ROLE_ADMIN')) {
+            return $this->redirectToRoute('product_index', array(), 301);
+        } else {
+            return $this->redirectToRoute('login', array(), 301);
+        }
     }
 }

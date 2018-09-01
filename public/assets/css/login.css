@@ -1,0 +1,12 @@
+.profile-img-card {
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+
+.login-input {
+    margin-bottom: 10px;
+}
+
+.form-signin {
+    max-width: 330px; padding: 15px; width: 100%;
+}

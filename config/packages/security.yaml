@@ -42,3 +42,5 @@ security:
          # only admin users can access the system
          - { path: ^/customer, roles: ROLE_ADMIN }
          - { path: ^/product, roles: ROLE_ADMIN }
+         - { path: ^/purchase, roles: ROLE_ADMIN }
+

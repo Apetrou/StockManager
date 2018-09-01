@@ -33,7 +33,7 @@ class ProductOrder
      */
     private $productOrderItems;
 
-    public function __construct(Customer $customer)
+    public function __construct(Customer $customer=null)
     {
         $this->productOrderItems = new ArrayCollection();
         $this->customer = $customer;

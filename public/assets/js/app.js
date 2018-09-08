@@ -14,6 +14,11 @@ $(document).ready(function() {
     $('[data-toggle="tooltip"]').tooltip();
 
     /*
+        SET ALL THE QUANTITY FIELDS FOR ORDER TO 0
+     */
+    $('.input-number').val(0);
+
+    /*
         CREATE ALL DATATABLES
      */
     $('#orderLogTable').DataTable( {
@@ -24,7 +29,10 @@ $(document).ready(function() {
         bInfo: false,
         paginate: true,
         pageLength: 5,
-        order: [[ 0, "desc" ]]
+        order: [[ 0, "desc" ]],
+        "oLanguage": {
+            "sEmptyTable": "No Orders To Show."
+        }
     } );
 
 
@@ -35,7 +43,10 @@ $(document).ready(function() {
         ],
         bInfo: false,
         paginate: true,
-        pageLength: 5
+        pageLength: 5,
+        "oLanguage": {
+            "sEmptyTable": "No Products To Show."
+        }
     } );
 
     $('#customerTable').DataTable( {
@@ -46,7 +57,10 @@ $(document).ready(function() {
         ],
         bInfo: false,
         paginate: true,
-        pageLength: 5
+        pageLength: 5,
+        "oLanguage": {
+            "sEmptyTable": "No Customers To Show."
+        }
     } );
 
     $('#customerPurchaseTable').DataTable( {
@@ -56,7 +70,10 @@ $(document).ready(function() {
         ],
         bInfo: false,
         paginate: true,
-        pageLength: 5
+        pageLength: 5,
+        "oLanguage": {
+            "sEmptyTable": "No Purchases For This Customer To Show."
+        }
     } );
 
     $('#customerOrderTable').DataTable( {
@@ -67,7 +84,10 @@ $(document).ready(function() {
         bInfo: false,
         paginate: true,
         pageLength: 5,
-        order: [[ 0, "desc" ]]
+        order: [[ 0, "desc" ]],
+        "oLanguage": {
+            "sEmptyTable": "No Orders To Show."
+        }
     } );
 
     // Add slideDown animation to Bootstrap dropdown when expanding.
@@ -187,6 +207,11 @@ $(document).ready(function() {
         var $quantityField = $(this).parent().next();
         var plusButton = $(this).parent().next().next().children();
 
+        if($quantityField.val() == 0) {
+            $(this).prop('disabled','disabled');
+            return false;
+        }
+
         $quantityField.val(parseInt($quantityField.val()) - 1);
 
         if($quantityField.val() == 0) {
@@ -210,10 +235,16 @@ $(document).ready(function() {
         if(confirm('Click OK to confirm.')) {
 
             var item = $(this).data('item');
+
             var quantity = $(this).parent().parent().children('.basket-quantity').html();
 
-            removeOrderItemFromBasket(item, quantity)
+            $('.input-number').each(function () {
+               if($(this).data('id') == item.id) {
+                   $(this).val(parseInt($(this).val()) - parseInt(quantity));
+               }
+            });
 
+            removeOrderItemFromBasket(item, quantity)
         }
     });
 
@@ -270,69 +301,31 @@ $(document).ready(function() {
             order = {"customerId" : null, "orderItems" : orderItems};
         }
 
-        var request = new XMLHttpRequest();
-        request.open('POST', sendOrderUrl, true);
-        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-        request.responseType = 'blob';
-        var fileName = "";
+        $.ajax({
+            type: "POST",
+            url: sendOrderUrl,
+            data: JSON.stringify(order),
+            success: function(data, textStatus, xhr){
+                var invoiceNumber = xhr.getResponseHeader('Invoice-Number');
+                var downloadLink = $('<a class="btn btn-success text-white" href="/invoice/'+invoiceNumber+'"><i class="fas fa-download"></i> Order Completed - Download Invoice</a>');
 
-        request.onload = function(e) {
-
-            if (this.status === 200) {
-                var blob = this.response;
-                if(window.navigator.msSaveOrOpenBlob) {
-                    window.navigator.msSaveBlob(blob, "invoice.xlsx");
+                $('#sendOrder').replaceWith(downloadLink);
+                $('#confirmOrderModal').on('hidden.bs.modal', function () {
+                    window.location.reload();
+                })
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                $('#confirmOrderModal').modal('toggle');
+                if(confirm('An error has occured, click OK to report this.')) {
+                    window.location.reload();
                 }
-                else{
-                    var downloadLink = window.document.createElement('a');
-                    var link = window.URL.createObjectURL(new Blob([blob], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel' }));
-                    var downloadLink = $('<a class="btn btn-success text-white" href="'+link+'"><i class="fas fa-download"></i> Download Invoice</a>');
-                    var contentTypeHeader = request.getResponseHeader("Content-Type");
-
-                    $('#sendOrder').replaceWith(downloadLink);
-                    $('#confirmOrderModal').on('hidden.bs.modal', function () {
-                        window.location.reload();
-                    })
-                }
-            }
-        };
-        request.send(JSON.stringify(order));
+            },
+        });
     });
 
     $('#confirmOrderModal').on('hidden.bs.modal', function () {
         $('#confirm-order-basket tbody').empty();
     })
-
-    // ORDER LOG PAGES
-    $('body').on('click','.download-invoice',function () {
-        var generateInvoiceUrl = $(this).prop('href');
-
-        var request = new XMLHttpRequest();
-        request.open('POST', generateInvoiceUrl, true);
-        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-        request.responseType = 'blob';
-        var fileName = "";
-
-        request.onload = function(e) {
-
-            if (this.status === 200) {
-                var blob = this.response;
-                if(window.navigator.msSaveOrOpenBlob) {
-                    window.navigator.msSaveBlob(blob, "invoice.xlsx");
-                }
-                else{
-                    var downloadLink = window.document.createElement('a');
-                    var contentTypeHeader = request.getResponseHeader("Content-Type");
-                    var link = window.URL.createObjectURL(new Blob([blob], { type: contentTypeHeader }));
-                    // var link = window.URL.createObjectURL(new Blob([blob], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel' }));
-                    var downloadLink = $('<a class="btn btn-success text-white" href="'+link+'"><i class="fas fa-download"></i> Download Invoice</a>');
-
-                    $(this).replaceWith(downloadLink);
-                }
-            }
-        };
-        request.send();
-    });
 });
 
 function addOrderItemToBasket($item) {

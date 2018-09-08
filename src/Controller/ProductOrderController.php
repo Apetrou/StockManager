@@ -23,6 +23,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Psr\Log\LoggerInterface;
 
 class ProductOrderController extends Controller
 {
@@ -31,10 +32,13 @@ class ProductOrderController extends Controller
 
     protected $excelManager;
 
-    public function __construct(StockManager $stockManager, ExcelManager $excelManager)
+    protected $logger;
+
+    public function __construct(StockManager $stockManager, ExcelManager $excelManager, LoggerInterface $logger)
     {
         $this->stockManager = $stockManager;
         $this->excelManager = $excelManager;
+        $this->logger = $logger;
     }
 
     /**
@@ -85,11 +89,13 @@ class ProductOrderController extends Controller
                 'Order failed.'
             );
 
+            $this->logger->error($e->getMessage());
+
             return new JsonResponse($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
+        // RETURN THE INVOICE
         return $this->excelManager->generateInvoice($productOrder, $this->get('phpexcel'));
-//        return $this->generateExcelInvoice($productOrder);
     }
 
     /**
@@ -122,7 +128,7 @@ class ProductOrderController extends Controller
     /**
      * @Route("/invoice/{id}", name="generate_invoice")
      */
-    public function customerInvoiceAction(ProductOrder $productOrder): Response
+    public function invoiceAction(ProductOrder $productOrder): Response
     {
         $repo = $this->getDoctrine()->getRepository(ProductOrder::class);
         $productOrder = $repo->find($productOrder->getId());

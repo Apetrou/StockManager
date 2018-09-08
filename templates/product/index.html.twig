@@ -38,10 +38,6 @@
                     <a class="btn btn-warning" href="{{ path('product_edit', {'id': product.id}) }}">edit</a>
                 </td>
             </tr>
-        {% else %}
-            <tr>
-                <td colspan="9">no records found</td>
-            </tr>
         {% endfor %}
         </tbody>
     </table>

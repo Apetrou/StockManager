@@ -19,11 +19,13 @@ class ExcelManager
     private $kernelRootDirectory;
 
 //    private $excelS;
+    private  $vat;
 
     public function __construct($kernelRootDirectory)
     {
         $this->kernelRootDirectory = $kernelRootDirectory;
 //        $this->excelS = $excelService;
+        $this->vat = 0.19;
     }
 
     public function generateInvoice(ProductOrder $productOrder, $excelService)
@@ -36,9 +38,15 @@ class ExcelManager
             $phpExcelObject->setActiveSheetIndex(0)
                 ->setCellValue('C8', $productOrder->getCustomer()->getFirstName()." ".$productOrder->getCustomer()->getLastName())
                 ->setCellValue('C9', $productOrder->getCustomer()->getTelephoneNumber());
+        } else {
+            $phpExcelObject->setActiveSheetIndex(0)
+                ->setCellValue('C8', "N/A")
+                ->setCellValue('C9', "N/A");
         }
 
         $counter = 14;
+
+        $totalCost = 0;
 
         foreach($productOrder->getProductOrderItems() as $productOrderItem) {
             $phpExcelObject->setActiveSheetIndex(0)
@@ -47,12 +55,18 @@ class ExcelManager
                 ->setCellValue('D'.$counter, $productOrderItem->getCost())
                 // make vat a global var
                 ->setCellValue('E'.$counter, ( (float) $productOrderItem->getCost()) * 0.19)
-                ->setCellValue('F'.$counter, $productOrderItem->getCost() - ((float) $productOrderItem->getCost() * 0.19));
+                ->setCellValue('F'.$counter, $productOrderItem->getCost() + ((float) $productOrderItem->getCost() * $this->vat));
 
+            $totalCost += (float) $productOrderItem->getCost();
 
 
             $counter++;
         }
+
+        $phpExcelObject->setActiveSheetIndex(0)
+            ->setCellValue('F33', $totalCost)
+            ->setCellValue('F34', $totalCost * $this->vat)
+            ->setCellValue('F35', $totalCost + ($totalCost * $this->vat));
 
         $writer = $excelService->createWriter($phpExcelObject, 'Excel2007');
 
@@ -60,10 +74,11 @@ class ExcelManager
         // adding headers
         $dispositionHeader = $response->headers->makeDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
-            'stream-file.xls'
+            'receipt_order_'.$productOrder->getId().'.xlsx'
         );
         $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
         $response->headers->set('Pragma', 'public');
+        $response->headers->set('Invoice-Number', $productOrder->getId());
         $response->headers->set('Cache-Control', 'maxage=1');
         $response->headers->set('Content-Disposition', $dispositionHeader);
 

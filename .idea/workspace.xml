@@ -303,13 +303,7 @@
             <path>
               <item name="StockManager" type="b2602c69:ProjectViewProjectNode" />
               <item name="StockManager" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="StockManager" type="b2602c69:ProjectViewProjectNode" />
-              <item name="StockManager" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="Entity" type="462c0819:PsiDirectoryNode" />
+              <item name="public" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -450,16 +444,15 @@
       <workItem from="1536353271920" duration="207000" />
       <workItem from="1536353581393" duration="173000" />
       <workItem from="1536356395734" duration="134000" />
-      <workItem from="1536356765329" duration="4263000" />
+      <workItem from="1536356765329" duration="4272000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="255808000" />
+    <option name="totallyTimeSpent" value="255817000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.20347957" />
       <window_info anchor="bottom" id="TODO" order="11" />

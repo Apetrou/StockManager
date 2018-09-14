@@ -8,6 +8,7 @@
         "doctrine/annotations": "^1.6",
         "liuggio/ExcelBundle": "^2.1",
         "sensio/framework-extra-bundle": "^5.2",
+        "sensio/generator-bundle": "^3.1",
         "symfony/asset": "^3.4",
         "symfony/console": "^3.4",
         "symfony/flex": "^1.0",
@@ -24,7 +25,9 @@
         "symfony/yaml": "^3.4"
     },
     "require-dev": {
+        "easycorp/easy-deploy-bundle": "^1.0",
         "sensiolabs/security-checker": "^4.1",
+        "symfony/apache-pack": "^1.0",
         "symfony/dotenv": "^3.4",
         "symfony/maker-bundle": "^1.5",
         "symfony/profiler-pack": "^1.0",

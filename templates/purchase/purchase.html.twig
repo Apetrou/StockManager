@@ -9,7 +9,7 @@
         Order For - {{ customer.firstName }} {{ customer.lastName }}
         {% else %}
         Order
-        <a class="btn btn-outline-dark float" href="{{ path('order_log') }}"><i class="fas fa-history"></i></a>
+        <a class="btn btn-outline-dark float" href="{{ path('order_log') }}" data-toggle="tooltip" title="Order History"><i class="fas fa-history"></i></a>
         {% endif %}
 
         <div class="dropdown float-right">
@@ -55,7 +55,7 @@
                 <td>{{ product.artifactNumber }} </td>
                 <td>{{ product.cataloguePage }} </td>
                 <td>{{ product.cost }} </td>
-                <td>{{ product.stock }} </td>
+                <td {% if product.stock < 5 %} bgcolor="#dc143c" class="text-white" {% endif %}>{{ product.stock }} </td>
                 <td>
                     <div class="input-group">
                         <span class="input-group-prepend">

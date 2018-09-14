@@ -14,5 +14,4 @@ return [
     Liuggio\ExcelBundle\LiuggioExcelBundle::class => ['all' => true],
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
     EasyCorp\Bundle\EasyDeployBundle\EasyDeployBundle::class => ['dev' => true, 'test' => true],
-    Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle::class => ['all' => true],
 ];

@@ -12,6 +12,7 @@
         <thead>
         <tr>
             <th>Order Number</th>
+            <th>Customer</th>
             <th>Date</th>
             <th>Download Invoice</th>
         </tr>
@@ -20,6 +21,7 @@
         {% for order in orders %}
             <tr>
                 <td>{{ order.id }}</td>
+                <td>{% if order.customer.firstName is defined %} {{ order.customer.firstName }} {{ order.customer.lastName }}{% endif %}</td>
                 <td>{{ order.orderDate | date("m/d/Y") }}</td>
                 <td><a href="{{ path('generate_invoice', {'id': order.id}) }}" class="btn btn-success download-invoice" data-toggle="tooltip" title="Download Invoice No. {{ order.id }}"><i class="fas fa-receipt"></i></a></td>
             </tr>

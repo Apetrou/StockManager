@@ -106,6 +106,21 @@ $(document).ready(function() {
         $(this).find('.btn-success').prop('disabled','disabled');
     });
 
+    $('body').on('click','.options-dropdown',function () {
+        $(this).children().children('.fa-cog').toggleClass('fa-spin');
+
+        if($(this).hasClass('fa-spin')) {
+            $(this).removeClass('fa-spin');
+        }
+
+
+        // if(!$(this).hasClass('show')) {
+        //     $(this).children().children('.fa-cog').addClass('spin').addClass('fa-spin');
+        // } else {
+        //     $(this).children().children('.fa-cog').removeClass('spin').removeClass('fa-spin');
+        // }
+    });
+
     // $('#customerPurchaseTable').DataTable( {
     //     dom: 'Bfrtip',
     //     buttons: [

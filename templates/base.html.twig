@@ -17,6 +17,19 @@
     {% if is_granted('ROLE_ADMIN') %}
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark " style="margin-bottom: 30px;">
+            {#<button class="btn btn-outline-warning">></button>#}
+            <div class="dropdown" >
+                <button type="button" class="btn btn-outline-warning" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="far fa-comment-alt warning fa-1x"></i>
+                    {#<span class="caret yellow"></span>#}
+                </button>
+                <div class="dropdown-menu dropdown-menu-left dropdown-comment" role="menu" aria-labelledby="dropdownMenuButton">
+                    {{ render(controller(
+                        'App\\Controller\\CommentController::new'
+                    )) }}
+                </div>
+            </div>
+
             <div class="container">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>

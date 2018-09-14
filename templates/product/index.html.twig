@@ -32,10 +32,18 @@
                 <td>{{ product.quantity }}</td>
                 <td>{{ product.cost }}</td>
                 <td>{{ product.comments }}</td>
-                <td>{{ product.stock }}</td>
-                <td class="text-center">
-                    <a class="btn btn-secondary" href="{{ path('product_show', {'id': product.id}) }}">show</a>
-                    <a class="btn btn-warning" href="{{ path('product_edit', {'id': product.id}) }}">edit</a>
+                <td {% if product.stock < 5 %} bgcolor="#dc143c" class="text-white" {% endif %}>{{ product.stock }}</td>
+                <td>
+                    <div class="dropdown btn-group options-dropdown" >
+                        <button type="button" class="btn btn-default dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-cog"></i>
+                            <span class="caret"></span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="{{ path('product_show', {'id': product.id}) }}">View Product</a>
+                            <a class="dropdown-item" href="{{ path('product_edit', {'id': product.id}) }}">Edit Product</a>
+                        </div>
+                    </div>
                 </td>
             </tr>
         {% endfor %}

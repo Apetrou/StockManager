@@ -25,7 +25,7 @@
         "symfony/dotenv": "^3.4",
         "symfony/yaml": "^3.4",
         "symfony/apache-pack": "^1.0",
-        "sensiolabs/security-checker": "^4.1"
+        "sensiolabs/security-checker": "^4.1",
     },
     "require-dev": {
         "symfony/maker-bundle": "^1.5",

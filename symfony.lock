@@ -134,6 +134,9 @@
             "ref": "c82bead70f9a4f656354a193df7bf0ca2114efa0"
         }
     },
+    "symfony/asset": {
+        "version": "v3.4.15"
+    },
     "symfony/cache": {
         "version": "v3.4.12"
     },
@@ -265,6 +268,9 @@
             "version": "3.3",
             "ref": "ba769b98463f9d5f3d907db32bb64337d1e62ecb"
         }
+    },
+    "symfony/security": {
+        "version": "v3.4.15"
     },
     "symfony/security-bundle": {
         "version": "3.3",

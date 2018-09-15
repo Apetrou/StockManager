@@ -22,13 +22,12 @@
         "symfony/twig-bundle": "^3.4",
         "symfony/validator": "^3.4",
         "symfony/webpack-encore-pack": "^1.0",
-        "symfony/yaml": "^3.4"
+        "symfony/yaml": "^3.4",
+        "symfony/dotenv": "^3.4",
+        "symfony/apache-pack": "^1.0",
+        "sensiolabs/security-checker": "^4.1",
     },
     "require-dev": {
-        "easycorp/easy-deploy-bundle": "^1.0",
-        "sensiolabs/security-checker": "^4.1",
-        "symfony/apache-pack": "^1.0",
-        "symfony/dotenv": "^3.4",
         "symfony/maker-bundle": "^1.5",
         "symfony/profiler-pack": "^1.0",
         "symfony/web-server-bundle": "^3.4"

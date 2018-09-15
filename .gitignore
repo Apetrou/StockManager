@@ -1,6 +1,5 @@
 /node_modules/*
 ###> symfony/framework-bundle ###
-/.env
 /public/bundles/
 /var/
 /vendor/

@@ -22,7 +22,7 @@ use App\Manager\ExcelManager;
 class CommentController extends Controller
 {
     /**
-     * @Route("/new", name="comment_new", methods="GET|POST")
+     * @Route("/new", name="comment_new")
      */
     public function new(Request $request): Response
     {
@@ -35,15 +35,10 @@ class CommentController extends Controller
             $em = $this->getDoctrine()->getManager();
             $comment->setDateAdded(new \DateTime());
             $comment->setChecked(0);
-            $comment->setRoute($request->get('_route'));
+            $comment->setRoute($request->getUri());
 
             $em->persist($comment);
             $em->flush();
-
-            $this->addFlash(
-                'success',
-                'Your comment has been send to the admin'
-            );
         }
 
         return $this->render('comment/_form.html.twig', [

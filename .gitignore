@@ -1,6 +1,8 @@
 /node_modules/*
 ###> symfony/framework-bundle ###
 /public/bundles/
+.env
+.env.dist
 /var/
 /vendor/
 ###< symfony/framework-bundle ###

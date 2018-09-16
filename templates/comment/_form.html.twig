@@ -1,5 +1,5 @@
-{{ form_start(form) }}
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+{{ form_start(form, {'attr': {'class': 'px-4 py-3', 'href': path('comment_new')  } }) }}
     {{ form_widget(form) }}
-    <button class="btn btn-default float-right">{{ button_label|default('Send') }}</button>
+    <button class="btn btn-success float-right btn-comment-send">{{ button_label|default('Send') }}</button>
 {{ form_end(form) }}
-<div class="clearfix" style="margin-bottom: 70px"></div>

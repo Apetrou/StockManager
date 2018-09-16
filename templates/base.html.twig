@@ -18,17 +18,6 @@
 
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark " style="margin-bottom: 30px;">
             {#<button class="btn btn-outline-warning">></button>#}
-            <div class="dropdown" >
-                <button type="button" class="btn btn-outline-warning" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="far fa-comment-alt warning fa-1x"></i>
-                    {#<span class="caret yellow"></span>#}
-                </button>
-                <div class="dropdown-menu dropdown-menu-left dropdown-comment" role="menu" aria-labelledby="dropdownMenuButton">
-                    {{ render(controller(
-                        'App\\Controller\\CommentController::new'
-                    )) }}
-                </div>
-            </div>
 
             <div class="container">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +25,17 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarNav">
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-outline-warning" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="far fa-comment-alt warning fa-1x"></i>
+                            {#<span class="caret yellow"></span>#}
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-left dropdown-comment" role="menu" aria-labelledby="dropdownMenuButton">
+                            {{ render(controller(
+                                'App\\Controller\\CommentController::new'
+                            )) }}
+                        </div>
+                    </div>
                     {#<a class="navbar-brand" href="#">Petrou Farming</a>#}
                     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
                         <li class="nav-item {% if 'product' in app.request.uri %} active {% endif %}">

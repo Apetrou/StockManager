@@ -8,6 +8,7 @@ require('@fortawesome/fontawesome-free/js/all.js');
 require('datatables.net-dt');
 require('datatables.net-bs4/js/dataTables.bootstrap4');
 require('../css/global.scss');
+const toastr = require('toastr');
 
 $(document).ready(function() {
 
@@ -106,20 +107,10 @@ $(document).ready(function() {
         $(this).find('.btn-success').prop('disabled','disabled');
     });
 
-    $('body').on('click','.options-dropdown',function () {
-        $(this).children().children('.fa-cog').toggleClass('fa-spin');
-
-        if($(this).hasClass('fa-spin')) {
-            $(this).removeClass('fa-spin');
-        }
-
-
-        // if(!$(this).hasClass('show')) {
-        //     $(this).children().children('.fa-cog').addClass('spin').addClass('fa-spin');
-        // } else {
-        //     $(this).children().children('.fa-cog').removeClass('spin').removeClass('fa-spin');
-        // }
-    });
+    // $('body').on('click','.options-dropdown',function () {
+    //     console.log('d');
+    //     $(this).children().children('.fa-cog').toggleClass('fa-spin');
+    // });
 
     // $('#customerPurchaseTable').DataTable( {
     //     dom: 'Bfrtip',
@@ -341,6 +332,39 @@ $(document).ready(function() {
     $('#confirmOrderModal').on('hidden.bs.modal', function () {
         $('#confirm-order-basket tbody').empty();
     })
+
+    // SUBMIT COMMENT FORM
+    $('body').on('submit','form[name="comment"]',function(e) {
+       e.preventDefault();
+
+        // url = Routing.generate(
+        //     'case_manager_address_lookup',
+        //     {
+        //         postcode: $(this).prev().val()
+        //     }
+        // );
+
+       sendCommentUrl = $(this).attr('href');
+
+       var form = $(this);
+
+       var formData = $(this).serialize();
+
+        $.ajax({
+            type: "POST",
+            url: sendCommentUrl,
+            data: formData,
+            success: function(data, textStatus, xhr){
+               form.trigger('reset');
+               toastr.success('Message Sent');
+               $('.btn-comment-send').children().remove();
+               $('.btn-comment-send').prop('disabled', false);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                toastr.error('An error Has Occurred');
+            },
+        });
+    });
 });
 
 function addOrderItemToBasket($item) {
@@ -385,11 +409,3 @@ function removeOrderItemFromBasket(item, quantity) {
     });
     $('.basket-badge').html(parseInt($('.basket-badge').html()) - quantity);
 }
-
-// function incrementBasketBadge() {
-//     $('.basket-badge').html(parent(('.basket-badge').html()) + 1);
-// }
-//
-// function decrementBasketBadge() {
-//     $('.basket-badge').html(parent(('.basket-badge').html()) - 1);
-// }

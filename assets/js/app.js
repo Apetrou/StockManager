@@ -8,6 +8,7 @@ require('@fortawesome/fontawesome-free/js/all.js');
 require('datatables.net-dt');
 require('datatables.net-bs4/js/dataTables.bootstrap4');
 require('../css/global.scss');
+// require('/assets/js/dropdown.js');
 const toastr = require('toastr');
 
 $(document).ready(function() {
@@ -148,6 +149,21 @@ $(document).ready(function() {
     $('body').on('click','#search',function(){
         $(this).val("");
     });
+
+    /** dropdown turn caret **/
+    $('.dropdown').on('hidden.bs.dropdown', function(e) {
+        $(this).find('.caret').toggleClass('rotate-180');
+    });
+
+    $('.dropdown').on('shown.bs.dropdown', function(e) {
+        $(this).find('.caret').toggleClass('rotate-180');
+    });
+
+    //this is to avoid the menu from closing if clicked inside the menu
+    $('body').on("click", ".dropdown-menu", function(e) {
+        $(this).parent().is(".open") && e.stopPropagation();
+    });
+
 
     $("#search").autocomplete({
         source: function(request, response) {

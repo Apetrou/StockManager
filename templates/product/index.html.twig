@@ -19,7 +19,7 @@
                 <th>Cost</th>
                 <th>Comments</th>
                 <th>Stock</th>
-                <th>actions</th>
+                <th>Options</th>
             </tr>
         </thead>
         <tbody>
@@ -34,8 +34,8 @@
                 <td>{{ product.comments }}</td>
                 <td {% if product.stock < 5 %} bgcolor="#dc143c" class="text-white" {% endif %}>{{ product.stock }}</td>
                 <td>
-                    <div class="dropdown btn-group options-dropdown" >
-                        <button type="button" class="btn btn-default dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="dropdown btn-group options-dropdown float-right" >
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-cog"></i>
                             <span class="caret"></span>
                         </button>

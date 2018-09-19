@@ -8,7 +8,7 @@ Encore
     .setPublicPath('/build')
 
     // will output as build/app.js
-    .addEntry('app', './public/assets/js/app.js')
+    .addEntry('app', './assets/js/app.js')
 
     .enableBuildNotifications()
     .autoProvidejQuery()

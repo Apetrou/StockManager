@@ -29,7 +29,7 @@ class ProductOrder
     private $orderDate;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ProductOrderItem", mappedBy="productOrder", cascade={"persist"}))
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductOrderItem", mappedBy="productOrder", cascade={"persist"}), onDelete=cascade)
      */
     private $productOrderItems;
 

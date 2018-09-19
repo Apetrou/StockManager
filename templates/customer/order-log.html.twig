@@ -21,7 +21,7 @@
             <tr>
                 <td>{{ order.id }}</td>
                 <td>{{ order.orderDate | date("m/d/Y") }}</td>
-                <td><a href="{{ path('generate_customer_invoice', {'id': order.id}) }}" class="btn btn-success download-invoice" data-toggle="tooltip" title="Download Invoice No. {{ order.id }}"><i class="fas fa-receipt"></i></a></td>
+                <td><a href="{{ path('generate_customer_invoice', {'id': order.id}) }}" class="btn btn-success download-invoice float-right" data-toggle="tooltip" title="Download Invoice No. {{ order.id }}"><i class="fas fa-receipt"></i></a></td>
             </tr>
         {% endfor %}
         </tbody>

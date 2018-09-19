@@ -30,7 +30,7 @@ class ExcelManager
 
     public function generateInvoice(ProductOrder $productOrder, $excelService)
     {
-        $phpExcelObject = $excelService->createPHPExcelObject($this->kernelRootDirectory.'/public/assets/excel/receipt.xlsx');
+        $phpExcelObject = $excelService->createPHPExcelObject($this->kernelRootDirectory.'/assets/excel/receipt.xlsx');
         $phpExcelObject->setActiveSheetIndex(0)
             ->setCellValue('F4', $productOrder->getOrderDate()->format('Y-m-d'))
             ->setCellValue('F5', $productOrder->getId());

@@ -9,15 +9,12 @@
 @import "login.css";
 @import "navbar.css";
 @import "alert.css";
+@import "dashboard.css";
 @import "~toastr/toastr.scss";
 
 .main-container {
   margin-top: 20px;
   margin-bottom: 120px;
-}
-
-body {
-  margin-bottom: 40px;
 }
 
 .hoverable {
@@ -44,6 +41,9 @@ a.paginate_button.current {
   // override current page button styling here.
 }
 
-
+.apss-logo {
+  height:60px;
+  width:auto;
+}
 
 

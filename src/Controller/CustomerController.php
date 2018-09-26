@@ -33,7 +33,7 @@ class CustomerController extends Controller
      */
     public function index(CustomerRepository $customerRepository): Response
     {
-        return $this->render('customer/index.html.twig', ['customers' => $customerRepository->findAll()]);
+        return $this->render('customer/index.html.twig', ['customers' => $customerRepository->findAll(), 'pageTitle' => 'Customers']);
     }
 
     /**
@@ -61,6 +61,7 @@ class CustomerController extends Controller
         return $this->render('customer/new.html.twig', [
             'customer' => $customer,
             'form' => $form->createView(),
+            'pageTitle' => 'Create New Customer'
         ]);
     }
 
@@ -69,7 +70,11 @@ class CustomerController extends Controller
      */
     public function show(Customer $customer): Response
     {
-        return $this->render('customer/show.html.twig', ['customer' => $customer]);
+        return $this->render('customer/show.html.twig',
+            [
+                'customer' => $customer,
+                'pageTitle' => 'Customer - '.$customer->getFirstName().' '.$customer->getLastName()
+            ]);
     }
 
     /**
@@ -94,6 +99,7 @@ class CustomerController extends Controller
         return $this->render('customer/edit.html.twig', [
             'customer' => $customer,
             'form' => $form->createView(),
+            'pageTitle' => 'Edit Customer - '.$customer->getFirstName().' '.$customer->getLastName()
         ]);
     }
 
@@ -160,7 +166,13 @@ class CustomerController extends Controller
         $repo = $this->getDoctrine()->getRepository(ProductOrder::class);
         $productOrders = $repo->findCustomerOrders($customer);
 
-        return $this->render('customer/order-log.html.twig', ['customer' => $customer, 'orders' => $productOrders]);
+        return $this->render('customer/order-log.html.twig',
+            [
+                'customer' => $customer,
+                'orders' => $productOrders,
+                'pageTitle' => 'Order Log - '.$customer->getFirstName().' '.$customer->getLastName()#
+            ]
+        );
     }
 
     /**

@@ -5,10 +5,10 @@ ul.dropdown-menu:hover {
     background-color: #343a40;
 }
 .nav .open > a, .nav .open > a:focus, .nav .open > a:hover {
-    background-color: #343a40;
+    background-color: #343a40 !important;
 }
 .nav > li > a:focus, .nav > li > a:hover {
-    background-color: #343a40;
+    background-color: #343a40 !important;
 }
 
 /* COMMENT DROPDOWN */

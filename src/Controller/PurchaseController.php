@@ -16,6 +16,10 @@ class PurchaseController extends Controller
         $repo = $this->getDoctrine()->getRepository(Product::class);
         $products = $repo->findAll();
 
-        return $this->render('purchase/purchase.html.twig', ['products' => $products]);
+        return $this->render('purchase/purchase.html.twig',
+            [
+                'products' => $products,
+                'pageTitle' => 'Purchase'
+            ]);
     }
 }

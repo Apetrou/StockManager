@@ -10,3 +10,14 @@
 .form-signin {
     max-width: 330px; padding: 15px; width: 100%;
 }
+
+.login-card {
+    margin: 0 auto; /* Added */
+    float: none; /* Added */
+    margin-bottom: 10px; /* Added */
+}
+
+#profile-img {
+    width: auto;
+    height:300px;
+}

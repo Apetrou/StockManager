@@ -108,6 +108,10 @@ $(document).ready(function() {
         $(this).find('.btn-success').prop('disabled','disabled');
     });
 
+    $('body').on('click','.back-page',function () {
+        window.history.back();
+    });
+
     // $('body').on('click','.options-dropdown',function () {
     //     console.log('d');
     //     $(this).children().children('.fa-cog').toggleClass('fa-spin');
@@ -219,7 +223,7 @@ $(document).ready(function() {
         }
 
         var $item = {'id':$quantityField.data("id"), 'name':$quantityField.data("name"),
-            'artifactNumber':$quantityField.data('artifact-number'), 'cataloguePage':$quantityField.data('catalogue-page'),
+            'artifactNumber':$quantityField.data('artifact-number'),
             'cost':$quantityField.data('cost')};
 
         addOrderItemToBasket($item);
@@ -247,7 +251,7 @@ $(document).ready(function() {
         }
 
         var $item = {"id":$quantityField.data("id"), "name":$quantityField.data("name"),
-            "artifactNumber":$quantityField.data('artifact-number'), "cataloguePage":$quantityField.data('catalogue-page'),
+            "artifactNumber":$quantityField.data('artifact-number'),
             "cost":$quantityField.data('cost')};
 
         removeOrderItemFromBasket($item, 1);
@@ -329,7 +333,7 @@ $(document).ready(function() {
             data: JSON.stringify(order),
             success: function(data, textStatus, xhr){
                 var invoiceNumber = xhr.getResponseHeader('Invoice-Number');
-                var downloadLink = $('<a class="btn btn-success text-white" href="/invoice/'+invoiceNumber+'"><i class="fas fa-download"></i> Order Completed - Download Invoice</a>');
+                var downloadLink = $('<a class="btn btn-success text-white" href="/invoice/'+invoiceNumber+'"><i class="fas fa-download"></i> Purchase Completed - Download Invoice</a>');
 
                 $('#sendOrder').replaceWith(downloadLink);
                 $('#confirmOrderModal').on('hidden.bs.modal', function () {

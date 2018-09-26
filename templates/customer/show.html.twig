@@ -3,22 +3,22 @@
 {% block title %}Customer{% endblock %}
 
 {% block body %}
-    <h1>
-        <a href="{{ path('customer_index') }}" class="btn btn-outline-secondary"><i class="fa fas fa-arrow-left"></i></a>
-        <span>Customer - {{ customer.firstName }} {{ customer.lastName }}</span>
-        {#<a class="btn btn-outline-dark float" href="{{ path('customer_order_log', {'id': customer.id}) }}"><i class="fas fa-history"></i></a>#}
-        {#<a class="btn btn-dark float-right" href="{{ path('customer_purchase', {'id': customer.id}) }}">Place order</a>#}
-        <div class="dropdown float-right">
-            <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Options
-            </button>
-            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="{{ path('customer_order_log', {'id': customer.id}) }}"><i class="fas fa-history"></i> Order History</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="{{ path('customer_purchase', {'id': customer.id}) }}"><i class="fas fa-cart-plus"></i> Place order</a>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">{{ pageTitle }}</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <button class="btn btn-sm btn-outline-secondary back-page"><i class="fas fa-caret-left"></i> Back</button>
+            <div class="dropdown float-right">
+                <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Options
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="{{ path('customer_order_log', {'id': customer.id}) }}"><i class="fas fa-history"></i> Order History</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{ path('customer_purchase', {'id': customer.id}) }}"><i class="fas fa-cart-plus"></i> Place order</a>
+                </div>
             </div>
         </div>
-    </h1>
+    </div>
 
     <table class="table table-hover table-striped" >
         <tbody>
@@ -65,7 +65,7 @@
         </tbody>
     </table>
 
-    <a class="btn btn-warning" href="{{ path('customer_edit', {'id': customer.id}) }}">Edit details</a>
+    <a class="btn btn-warning btn-sm" href="{{ path('customer_edit', {'id': customer.id}) }}">Edit details</a>
 
     {{ include('customer/_delete_form.html.twig') }}
 

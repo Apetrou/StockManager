@@ -4,9 +4,12 @@
 
 {% block body %}
 
-    <h1>Products
-    <span class="float-right"><a class="btn btn-success" href="{{ path('product_new') }}"><i class="fas fa-plus"></i> Create new</a></span>
-    </h1>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">{{ pageTitle }}</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <a class="btn btn-success btn-sm" href="{{ path('product_new') }}"><i class="fas fa-plus"></i> Create new</a>
+        </div>
+    </div>
 
     <table class="table table-striped table-bordered" id="productTable">
         <thead>

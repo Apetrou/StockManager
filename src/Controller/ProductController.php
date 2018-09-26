@@ -30,7 +30,11 @@ class ProductController extends Controller
      */
     public function index(ProductRepository $productRepository): Response
     {
-        return $this->render('product/index.html.twig', ['products' => $productRepository->findAll()]);
+        return $this->render('product/index.html.twig',
+            [
+                'products' => $productRepository->findAll(),
+                'pageTitle' => 'Products'
+            ]);
     }
 
     /**
@@ -58,6 +62,7 @@ class ProductController extends Controller
         return $this->render('product/new.html.twig', [
             'product' => $product,
             'form' => $form->createView(),
+            'pageTitle' => 'Add New Product'
         ]);
     }
 
@@ -66,7 +71,11 @@ class ProductController extends Controller
      */
     public function show(Product $product): Response
     {
-        return $this->render('product/show.html.twig', ['product' => $product]);
+        return $this->render('product/show.html.twig',
+            [
+                'product' => $product,
+                'pageTitle' => 'Product - '.$product->getName()
+            ]);
     }
 
     /**
@@ -91,6 +100,7 @@ class ProductController extends Controller
         return $this->render('product/edit.html.twig', [
             'product' => $product,
             'form' => $form->createView(),
+            'pageTitle' => 'Edit Product - '.$product->getName()
         ]);
     }
 

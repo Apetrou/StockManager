@@ -75,11 +75,17 @@ class ProductOrderController extends Controller
 
             $em->getConnection()->commit();
 
-            $this->addFlash(
-                'success',
-                'Your order has been generated.'
-            );
-
+            if(!is_null($customer)) {
+                $this->addFlash(
+                    'success',
+                    'Your purchase for '.$customer->getFirstName().' has been generated.'
+                );
+            } else {
+                $this->addFlash(
+                    'success',
+                    'Your purchase has been generated.'
+                );
+            }
 
         } catch (Exception $e) {
             $em->getConnection()->rollBack();

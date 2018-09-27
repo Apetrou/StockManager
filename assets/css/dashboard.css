@@ -109,3 +109,9 @@ body {
     height:40px;
     padding: 0;
 }
+
+/* Remove focus on dashboard side button click */
+.nav > li > a:focus, .nav > li > a:hover {
+     background-color: transparent !important;
+}
+

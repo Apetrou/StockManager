@@ -33,3 +33,8 @@ ul.dropdown-menu:hover {
 .rotate-180 {
     transform: rotate(-180deg);
 }
+
+/* Dropdown Active State */
+.dropdown-item.active, .dropdown-item:active {
+    background-color: #343a40 !important;
+}

@@ -290,7 +290,7 @@ $(document).ready(function() {
                 $('#confirm-order-basket tbody').append(row);
             });
         } else {
-            alert('No orders in basket.');
+            alert('No products in basket.');
         }
     });
 
